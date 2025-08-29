@@ -1,0 +1,84 @@
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+#tab.active {
+  background: #5a656a;
+  color: white;
+}
+
+.fc-event.is-absent {
+  background-color: #e34449 !important;
+  border-color: #e34449 !important;
+}
+
+/* Status-based colors for calendar events */
+.fc-event.status-未開始 {
+  background-color: #9ca3af !important;
+  border-color: #6b7280 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.fc-event.status-進行中 {
+  background-color: #3b82f6 !important;
+  border-color: #2563eb !important;
+  color: white !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.fc-event.status-完了 {
+  background-color: #10b981 !important;
+  border-color: #059669 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhanced hover effects for better visibility */
+.fc-event.status-未開始:hover {
+  background-color: #6b7280 !important;
+  border-color: #4b5563 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.fc-event.status-進行中:hover {
+  background-color: #2563eb !important;
+  border-color: #1d4ed8 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
+}
+
+.fc-event.status-完了:hover {
+  background-color: #059669 !important;
+  border-color: #047857 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Additional styling for better event visibility */
+.fc-event {
+  border-radius: 6px !important;
+  border-width: 2px !important;
+  transition: all 0.2s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.fc-event-title {
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+#footer.active {
+  color: #e81a48 !important;
+}

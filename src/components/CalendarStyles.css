@@ -1,0 +1,160 @@
+.calendar-container {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.calendar-container .fc {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.calendar-container .fc-header-toolbar {
+  background: linear-gradient(135deg, #1c75f9 0%, #69c4f5 100%);
+  color: white;
+  padding: 16px 20px;
+  margin: 0;
+  border-radius: 10px 10px 0 0;
+}
+
+.calendar-container .fc-toolbar-title {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: white !important;
+}
+
+.calendar-container .fc-button {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.calendar-container .fc-button:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.calendar-container .fc-button:active {
+  transform: translateY(0) !important;
+}
+
+.calendar-container .fc-daygrid-day {
+  border: 1px solid #f3f4f6 !important;
+  transition: all 0.2s ease !important;
+}
+
+.calendar-container .fc-daygrid-day:hover {
+  background-color: #f9fafb !important;
+  transform: scale(1.02) !important;
+  z-index: 10 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.calendar-container .fc-daygrid-day.fc-today-highlight {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+  position: relative !important;
+}
+
+.calendar-container .fc-daygrid-day.fc-today-highlight::before {
+  content: '今日' !important;
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  background: #f59e0b !important;
+  color: white !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  padding: 2px 6px !important;
+  border-radius: 10px !important;
+  z-index: 5 !important;
+}
+
+.calendar-container .fc-daygrid-day.fc-sunday-highlight {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+  border-left: 3px solid #ef4444 !important;
+}
+
+.calendar-container .fc-daygrid-day.fc-sunday-highlight .fc-daygrid-day-number {
+  color: #dc2626 !important;
+  font-weight: 700 !important;
+}
+
+.calendar-container .fc-daygrid-day.fc-sunday-header {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+  color: #dc2626 !important;
+  font-weight: 700 !important;
+}
+
+.calendar-container .fc-col-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+.calendar-container .fc-col-header-cell {
+  border-right: 1px solid #e2e8f0 !important;
+  padding: 12px 8px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+
+.calendar-container .fc-daygrid-day-number {
+  font-weight: 600 !important;
+  color: #374151 !important;
+  padding: 8px !important;
+  font-size: 0.95rem !important;
+}
+
+.calendar-container .fc-event {
+  border-radius: 6px !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  font-weight: 500 !important;
+  padding: 2px 6px !important;
+  margin: 1px 2px !important;
+  transition: all 0.2s ease !important;
+}
+
+.calendar-container .fc-event:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.calendar-container .fc-event.is-absent {
+  background: #f87171 !important;
+  color: white !important;
+}
+
+.calendar-container .fc-event.status-未開始 {
+  background: #9ca3af !important;
+  color: white !important;
+}
+
+.calendar-container .fc-event.status-進行中 {
+  background: #3b82f6 !important;
+  color: white !important;
+}
+
+.calendar-container .fc-event.status-完了 {
+  background: #10b981 !important;
+  color: white !important;
+}
+
+.calendar-container .fc-event.is-delayed {
+  background: #ef4444 !important;
+  color: white !important;
+  border: 2px solid #dc2626 !important;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
+}
+
+.calendar-container .fc-daygrid-day-frame {
+  min-height: 80px !important;
+}
+
+.calendar-container .fc-daygrid-day-events {
+  margin-top: 4px !important;
+} 
