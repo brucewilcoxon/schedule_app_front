@@ -4,7 +4,6 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import LocalGasStationOutlinedIcon from "@mui/icons-material/LocalGasStationOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const Footer = () => {
@@ -61,12 +60,12 @@ const Footer = () => {
         >
           {({ isActive }) => (
             <div className="flex flex-col items-center space-y-1">
-              <div className={`p-2 rounded-full transition-all duration-500 ${
+              <div className={`p-1 rounded-full transition-all duration-500 ${
                 isActive 
                   ? "bg-white/20 shadow-lg shadow-white/30 animate-bounce" 
                   : "hover:bg-white/20 hover:shadow-lg"
               }`}>
-                <LocalGasStationOutlinedIcon className="text-lg" />
+                <img src="/gas.svg" alt="Gas" className="w-8 h-8" />
               </div>
               <p className="text-xs font-bold tracking-wide">ガス管理</p>
             </div>

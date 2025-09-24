@@ -49,44 +49,53 @@ const Login = () => {
             width: '100%'
           }}
         />
-        
-        <div className="mb-8 relative group z-10">
-          <div className="relative transition-all duration-500 hover:scale-105 hover:shadow-3xl" >
-            <img 
-              className="w-[320px] h-30 object-cover object-center transition-transform duration-700 hover:scale-110" 
-              style={{ borderRadius: '10px', backdropFilter: "blur(10px)", boxShadow:"0px 0px 30px 10px #5c98eb, 0px 0px 50px 20px #5c98eb inset"}}
-              src="./Logo.png" 
-              alt="Logo" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-3xl"></div>
-          </div>
-          <div className="absolute -inset-1  from-custom-accent  rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-500 -z-10"></div>
+        {/* Top-left company logo with glow, shadow and subtle animation */}
+        <div className="absolute top-8 left-4 z-20 group">
+          <div className="absolute -inset-2 rounded-xl bg-gradient-to-r from-cyan-400/40 via-blue-500/30 to-blue-700/40 blur-lg opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+          <img
+            src="/companylogo.png"
+            alt="Company Logo"
+            className="relative h-8 w-auto md:h-12 lg:h-14 drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
+        
         <div className="w-full px-9 animate-slide-up z-10">
           <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 shadow-2xl">
             <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col space-y-6">
-            <div className="relative">
+            <div className="relative group">
               <input
-                className="w-full px-4 py-2 text-gray-900 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-gray-400 text-base font-medium hover:border-gray-300"
+                className="peer w-full px-4 py-4 text-gray-900 bg-white border-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-transparent text-base font-medium hover:border-gray-300"
                 id="email"
                 type="email"
-                placeholder="メールアドレス"
+                placeholder=" "
                 {...register("email")}
               />
+              <label htmlFor="email" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/3 text-gray-500 transition-all duration-300 bg-transparent px-1
+                group-hover:top-1 group-hover:text-xs group-hover:text-blue-600
+                peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-600
+                peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500">
+                メールアドレスを入力してください
+              </label>
               {errors.email?.message && (
                 <p className="mt-2 text-sm text-red-500 font-medium">
                   {errors.email?.message as React.ReactNode}
                 </p>
               )}
             </div>
-            <div className="relative">
+            <div className="relative group">
               <input
-                className="w-full px-4 py-2 text-black-900 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-gray-400 text-base font-medium hover:border-gray-300"
+                className="peer w-full px-4 py-4 text-black-900 bg-white border-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-transparent text-base font-medium hover:border-gray-300"
                 id="password"
                 type="password"
-                placeholder="パスワード"
+                placeholder=" "
                 {...register("password")}
               />
+              <label htmlFor="password" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/3 text-gray-500 transition-all duration-300 bg-transparent px-1
+                group-hover:top-1 group-hover:text-xs group-hover:text-blue-600
+                peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-600
+                peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500">
+                パスワードを入力してください
+              </label>
               {errors.password?.message && (
                 <p className="mt-2 text-sm text-red-500 font-medium">
                   {errors.password?.message as React.ReactNode}
