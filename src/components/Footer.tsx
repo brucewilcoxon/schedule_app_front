@@ -41,9 +41,9 @@ const Footer = () => {
                   ? "bg-white/20 shadow-lg shadow-white/30 animate-bounce"
                   : "hover:bg-white/20 hover:shadow-lg"
               }`}>
-                <CalendarMonthOutlinedIcon className="text-lg" />
+                <CalendarMonthOutlinedIcon style={{ fontSize: 32 }} />
               </div>
-              <p className="text-xs font-bold tracking-wide">スケジュール</p>
+              {/* <p className="text-xs font-bold tracking-wide">スケジュール</p> */}
             </div>
           )}
         </NavLink>
@@ -65,9 +65,9 @@ const Footer = () => {
                   ? "bg-white/20 shadow-lg shadow-white/30 animate-bounce" 
                   : "hover:bg-white/20 hover:shadow-lg"
               }`}>
-                <img src="/gas.svg" alt="Gas" className="w-8 h-8" />
+                <img src="/gas.svg" alt="Gas" className="w-12 h-12" />
               </div>
-              <p className="text-xs font-bold tracking-wide">ガス管理</p>
+              {/* <p className="text-xs font-bold tracking-wide">ガス管理</p> */}
             </div>
           )}
         </NavLink>
@@ -85,14 +85,14 @@ const Footer = () => {
           >
             <div className="flex flex-col items-center space-y-1">
               <div className="p-2 rounded-full transition-all duration-500 hover:bg-white/20 hover:shadow-lg">
-                <MoreHorizIcon className="text-lg" />
+                <MoreHorizIcon style={{ fontSize: 32 }} />
               </div>
-              <p className="text-xs font-bold tracking-wide">メニュー</p>
+              {/* <p className="text-xs font-bold tracking-wide">メニュー</p> */}
             </div>
           </button>
 
           {isMenuOpen && (
-            <div className="absolute bottom-14 left-1/2 -translate-x-1/2 w-44 bg-white/95 backdrop-blur-md border border-white/20 rounded-xl shadow-xl z-20 p-2 space-y-2">
+            <div className="absolute bottom-14 left-1/3 -translate-x-1/2 w-44 bg-white/95 backdrop-blur-md border border-white/20 rounded-xl shadow-xl z-20 p-2 space-y-2">
               <NavLink
                 to="/windNote"
                 onClick={() => setIsMenuOpen(false)}

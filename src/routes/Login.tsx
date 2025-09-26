@@ -39,7 +39,7 @@ const Login = () => {
       <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-cyan-400 via-blue-500 to-blue-700 relative">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: 'url(./sc.jpg)',
             backgroundSize: 'cover',
@@ -50,52 +50,65 @@ const Login = () => {
           }}
         />
         {/* Top-left company logo with glow, shadow and subtle animation */}
-        <div className="absolute top-8 left-4 z-20 group">
-          <div className="absolute -inset-2 rounded-xl bg-gradient-to-r from-cyan-400/40 via-blue-500/30 to-blue-700/40 blur-lg opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+        <div className="absolute top-12 left-8 z-20 group">
+          <div className="absolute -inset-2 rounded-xl  opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
           <img
             src="/companylogo.png"
             alt="Company Logo"
-            className="relative h-8 w-auto md:h-12 lg:h-14 drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] transition-transform duration-500 group-hover:scale-105"
+            className="relative h-14 w-auto  transition-transform duration-500 group-hover:scale-105"
           />
         </div>
         
         <div className="w-full px-9 animate-slide-up z-10">
           <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 shadow-2xl">
+            <div className="flex flex-col items-left mb-14 ">
+   
+              <h2 className="text-xl md:text-3xl font-semibold tracking-wide">
+                Login to Mrservice
+              </h2>
+            </div>
             <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col space-y-6">
-            <div className="relative group">
+            <div className="relative">
+              <label htmlFor="email" className="block mb-2 text-white/95 font-semibold tracking-wide">
+                メールアドレス
+              </label>
+              <span className="pointer-events-none absolute left-3 top-[42px] flex items-center text-gray-400">
+                {/* Mail icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M1.5 8.67v6.58A3.75 3.75 0 0 0 5.25 19h13.5A3.75 3.75 0 0 0 22.5 15.25V8.67l-8.78 5.49a3.75 3.75 0 0 1-3.44 0L1.5 8.67Z"/>
+                  <path d="M22.5 7.06v-.31A3.75 3.75 0 0 0 18.75 3H5.25A3.75 3.75 0 0 0 1.5 6.75v.31l9.47 5.92a2.25 2.25 0 0 0 2.06 0L22.5 7.06Z"/>
+                </svg>
+              </span>
               <input
-                className="peer w-full px-4 py-4 text-gray-900 bg-white border-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-transparent text-base font-medium hover:border-gray-300"
+                className="w-full pl-10 pr-4 py-2 text-gray-900 bg-white border-2 rounded-sm outline-none focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-gray-400 text-base font-medium hover:border-gray-300"
                 id="email"
                 type="email"
-                placeholder=" "
+                placeholder="メールアドレスを入力してください"
                 {...register("email")}
               />
-              <label htmlFor="email" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/3 text-gray-500 transition-all duration-300 bg-transparent px-1
-                group-hover:top-1 group-hover:text-xs group-hover:text-blue-600
-                peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-600
-                peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500">
-                メールアドレスを入力してください
-              </label>
               {errors.email?.message && (
                 <p className="mt-2 text-sm text-red-500 font-medium">
                   {errors.email?.message as React.ReactNode}
                 </p>
               )}
             </div>
-            <div className="relative group">
+            <div className="relative">
+              <label htmlFor="password" className="block mb-2 text-white/95 font-semibold tracking-wide">
+                パスワード
+              </label>
+              <span className="pointer-events-none absolute left-3 top-[42px] flex items-center text-gray-400">
+                {/* Lock icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M12 1.5a4.5 4.5 0 0 0-4.5 4.5v3H6.75A2.25 2.25 0 0 0 4.5 11.25v7.5A2.25 2.25 0 0 0 6.75 21h10.5a2.25 2.25 0 0 0 2.25-2.25v-7.5A2.25 2.25 0 0 0 17.25 9H16.5V6A4.5 4.5 0 0 0 12 1.5Zm-3 7.5V6a3 3 0 1 1 6 0v3H9Zm3 4.125a1.875 1.875 0 1 0 0 3.75 1.875 1.875 0 0 0 0-3.75Z" clipRule="evenodd"/>
+                </svg>
+              </span>
               <input
-                className="peer w-full px-4 py-4 text-black-900 bg-white border-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-transparent text-base font-medium hover:border-gray-300"
+                className="w-full pl-10 pr-4 py-2 text-black-900 bg-white border-2 rounded-sm outline-none focus:outline-none focus:ring-2 focus:ring-custom-primary focus:border-transparent transition-all duration-300 placeholder-gray-400 text-base font-medium hover:border-gray-300"
                 id="password"
                 type="password"
-                placeholder=" "
+                placeholder="パスワードを入力してください"
                 {...register("password")}
               />
-              <label htmlFor="password" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/3 text-gray-500 transition-all duration-300 bg-transparent px-1
-                group-hover:top-1 group-hover:text-xs group-hover:text-blue-600
-                peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-600
-                peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500">
-                パスワードを入力してください
-              </label>
               {errors.password?.message && (
                 <p className="mt-2 text-sm text-red-500 font-medium">
                   {errors.password?.message as React.ReactNode}
