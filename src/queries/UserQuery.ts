@@ -44,12 +44,28 @@ export const useDeleteUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation(api.deleteUser, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Delete mutation success:', data);
       queryClient.invalidateQueries("allUsers");
       queryClient.invalidateQueries("users");
     },
-    onError: () => {
-      toast.error("ユーザーの削除に失敗しました");
+    onError: (error) => {
+      console.error('Delete mutation error:', error);
+      
+      // Type guard to check if error has response property (Axios error)
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as any;
+        console.error('Error response:', axiosError.response);
+        console.error('Error status:', axiosError.response?.status);
+        console.error('Error data:', axiosError.response?.data);
+        
+        // Show more specific error message
+        const errorMessage = axiosError.response?.data?.message || "ユーザーの削除に失敗しました";
+        toast.error(errorMessage);
+      } else {
+        console.error('Unknown error type:', error);
+        toast.error("ユーザーの削除に失敗しました");
+      }
     },
   });
 };

@@ -43,6 +43,7 @@ import { z } from "zod";
 import { ShadTextarea } from "../@/components/ui/textarea";
 import { useGetUsers } from "../queries/UserQuery";
 import { Checkbox } from "../@/components/ui/checkbox";
+import { useGetUser } from "../queries/AuthQuery";
 
 interface ModalProps {
   modalOpen: boolean;
@@ -57,6 +58,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
 }) => {
   const updateCalendarEvent = useUpdateCalendarEvent();
   const { data: users, isLoading: usersLoading } = useGetUsers();
+  const { data: user } = useGetUser();
 
   // Parse existing content to extract fields
   const existingFields = {
@@ -113,6 +115,11 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
           <DialogTitle className="mb-5">スケジュールを編集</DialogTitle>
           <DialogDescription>
             カレンダーイベントを編集します
+            {user?.role === 'manager' && user?.id !== calendarEvent.user.id && (
+              <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                管理者権限で編集中
+              </span>
+            )}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

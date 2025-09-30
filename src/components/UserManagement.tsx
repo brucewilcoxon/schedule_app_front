@@ -12,6 +12,16 @@ import {
   DialogTrigger,
 } from "../@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../@/components/ui/alert-dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -31,7 +41,7 @@ import { User } from "../types/user";
 import { toast } from "react-toastify";
 import NoteHeader from "./NoteHeader";
 import Layout from "./Layout";
-import RequireAuth from "./RequireAuth";
+import RequireManager from "./RequireManager";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -51,7 +61,9 @@ const UserManagement = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [formData, setFormData] = useState<UserFormData>({
     email: "",
     password: "",
@@ -120,16 +132,35 @@ const UserManagement = () => {
   };
 
   const handleDeleteUser = (userId: number) => {
-    if (window.confirm("このユーザーを削除しますか？")) {
-      deleteUserMutation.mutate(userId, {
-        onSuccess: () => {
-          toast.success("ユーザーを削除しました");
-        },
-        onError: () => {
+    console.log('Attempting to delete user with ID:', userId);
+    deleteUserMutation.mutate(userId, {
+      onSuccess: (data) => {
+        console.log('Delete success:', data);
+        toast.success("ユーザーを削除しました");
+        setIsDeleteDialogOpen(false);
+        setUserToDelete(null);
+      },
+      onError: (error) => {
+        console.error('Delete error:', error);
+        
+        // Type guard to check if error has response property (Axios error)
+        if (error && typeof error === 'object' && 'response' in error) {
+          const axiosError = error as any;
+          console.error('Error response:', axiosError.response);
+          console.error('Error status:', axiosError.response?.status);
+          console.error('Error data:', axiosError.response?.data);
+          
+          // Show more specific error message
+          const errorMessage = axiosError.response?.data?.message || "ユーザーの削除に失敗しました";
+          toast.error(errorMessage);
+        } else {
+          console.error('Unknown error type:', error);
           toast.error("ユーザーの削除に失敗しました");
-        },
-      });
-    }
+        }
+        setIsDeleteDialogOpen(false);
+        setUserToDelete(null);
+      },
+    });
   };
 
   const openEditDialog = (user: User) => {
@@ -151,22 +182,33 @@ const UserManagement = () => {
     setIsViewDialogOpen(true);
   };
 
+  const openDeleteDialog = (user: User) => {
+    setUserToDelete(user);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (userToDelete) {
+      handleDeleteUser(userToDelete.id);
+    }
+  };
+
   if (isLoading) {
     return (
       <Layout>
-        <RequireAuth>
+        <RequireManager>
           <NoteHeader />
           <div className="flex justify-center items-center h-64">
             <div className="text-lg">読み込み中...</div>
           </div>
-        </RequireAuth>
+        </RequireManager>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      <RequireAuth>
+      <RequireManager>
         <NoteHeader />
         <div className="max-w-6xl mx-auto p-6">
           <div className="flex justify-between items-center mb-6">
@@ -321,9 +363,9 @@ const UserManagement = () => {
                     </TableCell>
                   </TableRow>
                 ) : users.length > 0 ? (
-                  users.map((user) => (
+                  users.map((user, index) => (
                     <TableRow key={user.id}>
-                      <TableCell>{user.id}</TableCell>
+                      <TableCell>{index + 1}</TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>{user.user_profile?.name || "-"}</TableCell>
                       <TableCell>
@@ -354,7 +396,7 @@ const UserManagement = () => {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleDeleteUser(user.id)}
+                            onClick={() => openDeleteDialog(user)}
                             className="text-red-600 hover:text-red-700"
                           >
                             <DeleteIcon className="h-4 w-4" />
@@ -552,8 +594,49 @@ const UserManagement = () => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+
+          {/* Delete Confirmation Modal */}
+          <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>ユーザーを削除しますか？</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {userToDelete && (
+                    <>
+                      この操作は取り消せません。ユーザー「{userToDelete.user_profile?.name || userToDelete.email}」を完全に削除します。
+                      <br />
+                      <strong>削除されるデータ:</strong>
+                      <ul className="mt-2 ml-4 list-disc">
+                        <li>ユーザーアカウント</li>
+                        <li>プロフィール情報</li>
+                        <li>質問・回答</li>
+                        <li>カレンダーイベント</li>
+                        <li>出艇記録</li>
+                        <li>その他の関連データ</li>
+                      </ul>
+                    </>
+                  )}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => {
+                  setIsDeleteDialogOpen(false);
+                  setUserToDelete(null);
+                }}>
+                  キャンセル
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={confirmDelete}
+                  className="bg-red-600 hover:bg-red-700"
+                  disabled={deleteUserMutation.isLoading}
+                >
+                  {deleteUserMutation.isLoading ? "削除中..." : "削除する"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
-      </RequireAuth>
+      </RequireManager>
     </Layout>
   );
 };

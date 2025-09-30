@@ -120,9 +120,9 @@ const NoteHeader = () => {
                     if (notification.type === "calendar_created" || 
                         notification.type === "calendar_updated" || 
                         notification.type === "calendar_deleted") {
-                      navigate("/windCalendar");
+                      navigate("/calendar");
                     } else {
-                      navigate("/mypage/intra");
+                      navigate("/calendar");
                     }
                   }}
                 >

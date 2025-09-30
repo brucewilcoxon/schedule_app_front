@@ -124,7 +124,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
           </div>
         </div>
         <div>
-          {user?.id === event.user.id && (
+          {(user?.id === event.user.id || user?.role === 'manager') && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">

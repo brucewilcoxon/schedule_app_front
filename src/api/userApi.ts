@@ -38,8 +38,26 @@ export const updateUser = async (userData: {
 };
 
 export const deleteUser = async (userId: number) => {
-  const { data } = await apiClient.delete(API_ROUTES.USERS.DELETE(userId));
-  return data;
+  console.log('API deleteUser called with userId:', userId);
+  console.log('API route:', API_ROUTES.USERS.DELETE(userId));
+  try {
+    const { data } = await apiClient.delete(API_ROUTES.USERS.DELETE(userId));
+    console.log('API deleteUser success:', data);
+    return data;
+  } catch (error) {
+    console.error('API deleteUser error:', error);
+    
+    // Type guard to check if error has response property (Axios error)
+    if (error && typeof error === 'object' && 'response' in error) {
+      const axiosError = error as any;
+      console.error('API error response:', axiosError.response);
+      console.error('API error status:', axiosError.response?.status);
+      console.error('API error data:', axiosError.response?.data);
+    } else {
+      console.error('Unknown error type:', error);
+    }
+    throw error;
+  }
 };
 
 export const createUserProfile = async (values: Profile) => {

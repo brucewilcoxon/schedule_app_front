@@ -5,6 +5,8 @@ import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { useGetUser } from "../queries/AuthQuery";
 
 const Footer = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +24,7 @@ const Footer = () => {
 
   return (
     <div className="w-full max-w-md bg-gradient-to-r from-cyan-400/90 via-blue-500/90 to-blue-700/90 backdrop-blur-md border-t sticky bottom-0 z-10 shadow-lg">
-      <div className="flex justify-between items-center px-3 py-2">
+      <div className="flex justify-between items-center px-3 py-1">
         <NavLink
           id="footer"
           className={({ isActive }) =>
@@ -36,12 +38,12 @@ const Footer = () => {
         >
           {({ isActive }) => (
             <div className="flex flex-col items-center space-y-1">
-              <div className={`p-2 rounded-full transition-all duration-500 ${
+              <div className={`p-1 rounded-full transition-all duration-500 ${
                 isActive 
                   ? "bg-white/20 shadow-lg shadow-white/30 animate-bounce"
                   : "hover:bg-white/20 hover:shadow-lg"
               }`}>
-                <CalendarMonthOutlinedIcon style={{ fontSize: 32 }} />
+                <CalendarMonthOutlinedIcon style={{ fontSize: 24 }} />
               </div>
               {/* <p className="text-xs font-bold tracking-wide">スケジュール</p> */}
             </div>
@@ -50,7 +52,7 @@ const Footer = () => {
         <NavLink
           id="footer"
           className={({ isActive }) =>
-            `relative flex-1 flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-500 ease-out transform hover:scale-105 hover:-rotate-1 ${
+            `relative flex-1 flex flex-col items-center justify-center p-1 rounded-xl transition-all duration-500 ease-out transform hover:scale-105 hover:-rotate-1 ${
               isActive
                 ? "text-white bg-white/20 shadow-lg shadow-white/20 border border-white/20 animate-pulse"
                 : "text-white hover:text-white hover:bg-white/10"
@@ -65,27 +67,51 @@ const Footer = () => {
                   ? "bg-white/20 shadow-lg shadow-white/30 animate-bounce" 
                   : "hover:bg-white/20 hover:shadow-lg"
               }`}>
-                <img src="/gas.svg" alt="Gas" className="w-12 h-12" />
+                <img src="/gas.svg" alt="Gas" className="w-8 h-8" />
               </div>
               {/* <p className="text-xs font-bold tracking-wide">ガス管理</p> */}
             </div>
           )}
         </NavLink>
-        {/* More menu button (third button) */}
+        <NavLink
+          id="footer"
+          className={({ isActive }) =>
+            `relative flex-1 flex flex-col items-center justify-center p-1 rounded-xl transition-all duration-500 ease-out transform hover:scale-105 hover:rotate-1 ${
+              isActive
+                ? "text-white bg-white/20 shadow-lg shadow-white/20 border border-white/20 animate-pulse"
+                : "text-white hover:text-white hover:bg-white/10"
+            }`
+          }
+          to="/windNote"
+        >
+          {({ isActive }) => (
+            <div className="flex flex-col items-center space-y-1">
+              <div className={`p-1 rounded-full transition-all duration-500 ${
+                isActive 
+                  ? "bg-white/20 shadow-lg shadow-white/30 animate-bounce"
+                  : "hover:bg-white/20 hover:shadow-lg"
+              }`}>
+                <EditNoteOutlinedIcon style={{ fontSize: 24 }} />
+              </div>
+              {/* <p className="text-xs font-bold tracking-wide">ノート</p> */}
+            </div>
+          )}
+        </NavLink>
+        {/* More menu button (fourth button) */}
         <div className="relative flex-1" ref={menuRef}>
           <button
             id="footer-more"
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className={`w-full relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-500 ease-out transform hover:scale-105 hover:rotate-1 ${
+            className={`w-full relative flex flex-col items-center justify-center p-1 rounded-xl transition-all duration-500 ease-out transform hover:scale-105 hover:rotate-1 ${
               isMenuOpen
                 ? "text-white bg-white/20 shadow-lg shadow-white/20 border border-white/20"
                 : "text-white hover:text-white hover:bg-white/10"
             }`}
           >
             <div className="flex flex-col items-center space-y-1">
-              <div className="p-2 rounded-full transition-all duration-500 hover:bg-white/20 hover:shadow-lg">
-                <MoreHorizIcon style={{ fontSize: 32 }} />
+              <div className="p-1 rounded-full transition-all duration-500 hover:bg-white/20 hover:shadow-lg">
+                <SettingsIcon style={{ fontSize: 24 }} />
               </div>
               {/* <p className="text-xs font-bold tracking-wide">メニュー</p> */}
             </div>
@@ -93,18 +119,7 @@ const Footer = () => {
 
           {isMenuOpen && (
             <div className="absolute bottom-14 left-1/3 -translate-x-1/2 w-44 bg-white/95 backdrop-blur-md border border-white/20 rounded-xl shadow-xl z-20 p-2 space-y-2">
-              <NavLink
-                to="/windNote"
-                onClick={() => setIsMenuOpen(false)}
-                className={({ isActive }) =>
-                  `flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                    isActive ? "bg-[#662EAF]/10 text-[#662EAF]" : "hover:bg-gray-50"
-                  }`
-                }
-              >
-                <EditNoteOutlinedIcon fontSize="small" />
-                <span className="text-sm">ノート</span>
-              </NavLink>
+
               <NavLink
                 to="/userManagement"
                 onClick={() => setIsMenuOpen(false)}

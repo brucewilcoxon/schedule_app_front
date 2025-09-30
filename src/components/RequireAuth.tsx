@@ -11,7 +11,6 @@ export const RequireAuth: FC<RequireAuthProps> = ({ children }) => {
   if (isLoading) {
     return <TailSpin height="80" width="80" color="#00aab9" />;
   }
-
   if (!user) {
     return <Navigate to="/login" />;
   }
