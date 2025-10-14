@@ -13,7 +13,7 @@ export const gasApi = {
     if (filters?.prefecture) params.append('prefecture', filters.prefecture);
     if (filters?.process) params.append('process', filters.process);
 
-    const response = await fetch(`${API_BASE_URL}/gas?${params.toString()}`, {
+    const response = await fetch(`${API_BASE_URL}gas?${params.toString()}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export const gasApi = {
 
   // Create new gas record
   async createGas(gasData: Omit<GasType, 'id' | 'created_at' | 'updated_at'>): Promise<GasType> {
-    const response = await fetch(`${API_BASE_URL}/gas`, {
+    const response = await fetch(`${API_BASE_URL}gas`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -47,7 +47,7 @@ export const gasApi = {
 
   // Update gas record
   async updateGas(id: number, gasData: Partial<GasType>): Promise<GasType> {
-    const response = await fetch(`${API_BASE_URL}/gas/${id}`, {
+    const response = await fetch(`${API_BASE_URL}gas/${id}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -65,7 +65,7 @@ export const gasApi = {
 
   // Delete gas record
   async deleteGas(id: number): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/gas/${id}`, {
+    const response = await fetch(`${API_BASE_URL}gas/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -80,7 +80,7 @@ export const gasApi = {
 
   // Get available gas types
   async getGasTypes(): Promise<string[]> {
-    const response = await fetch(`${API_BASE_URL}/gas-types`, {
+    const response = await fetch(`${API_BASE_URL}gas-types`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export const gasApi = {
 
   // Get available prefectures
   async getPrefectures(): Promise<string[]> {
-    const response = await fetch(`${API_BASE_URL}/prefectures`, {
+    const response = await fetch(`${API_BASE_URL}prefectures`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json',

@@ -91,4 +91,13 @@ export const API_ROUTES = {
     LIST: "/api/questions",
     BASE: "/api/question",
   },
+  GAS: {
+    INDEX: '/api/gas',
+    STORE: '/api/gas',
+    UPDATE: (id: number) => `/api/gas/${id}`,
+    DELETE: (id: number) => `/api/gas/${id}`,
+  },
+  PREFECTURES: {
+    INDEX: '/api/prefectures',
+  }
 } as const;
