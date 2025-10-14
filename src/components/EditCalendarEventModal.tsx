@@ -149,9 +149,22 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
               name="repairType"
               render={({ field }) => (
                 <FormItem>
-                  <FormControl>
-                    <Input className="mb-1" {...field} placeholder=" 修理の種類" />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="修理の種類を選択してください" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="定期点検">定期点検</SelectItem>
+                      <SelectItem value="故障修理">故障修理</SelectItem>
+                      <SelectItem value="予防保全">予防保全</SelectItem>
+                      <SelectItem value="緊急修理">緊急修理</SelectItem>
+                      <SelectItem value="部品交換">部品交換</SelectItem>
+                      <SelectItem value="清掃・メンテナンス">清掃・メンテナンス</SelectItem>
+                      <SelectItem value="その他">その他</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

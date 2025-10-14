@@ -385,7 +385,7 @@ const WindCalendar = () => {
   return (
     <Layout>
       <RequireAuth>
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen relative w-full">
           <NoteHeader />
           <div className="flex-grow overflow-y-auto px-3">
             {/* Search Bar */}
@@ -589,7 +589,6 @@ const WindCalendar = () => {
                     events={formattedEvents}
                     businessHours={true}
                     displayEventTime={false}
-                    schedulerLicenseKey="CC-Attribution-NonCommercial-NoDerivatives"
                     dateClick={(info) => setSelectedDate(new Date(info.date))}
                     eventClassNames={eventClassNames}
                     dayCellClassNames={({ date }) => {

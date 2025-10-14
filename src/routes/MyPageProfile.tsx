@@ -60,6 +60,7 @@ const MyPageProfile = () => {
     resolver: zodResolver(userProfileValidationSchema),
     mode: "onChange",
     defaultValues: {
+      email: user?.email || "",
       name: profile?.name || "",
       gender: profile?.gender || "",
       age: profile?.age || "",
@@ -72,6 +73,7 @@ const MyPageProfile = () => {
   React.useEffect(() => {
     if (profile) {
       form.reset({
+        email: user?.email || "",
         name: profile.name || "",
         gender: profile.gender || "",
         age: profile.age || "",
@@ -79,12 +81,13 @@ const MyPageProfile = () => {
         profile_image: profile.profile_image || "",
       });
     }
-  }, [profile, form]);
+  }, [profile, user, form]);
 
   const onSubmit = async (
     values: z.infer<typeof userProfileValidationSchema>
   ) => {
     // Convert empty strings to undefined and handle null values
+    // Exclude email from profile data as it shouldn't be updated
     const profileData = {
       name: values.name || undefined,
       gender: values.gender || undefined,
@@ -101,8 +104,8 @@ const MyPageProfile = () => {
       <RequireAuth>
         <NoteHeader />
         <Form {...form}>
-          <div className="p-3">
-            <h1 className="mb-4 text-center font-bold">
+          <div className="p-4 sm:p-6 max-w-4xl mx-auto">
+            <h1 className="mb-6 text-center font-bold text-xl sm:text-2xl">
               プロフィールを編集する
             </h1>
             {!profile && (
@@ -112,7 +115,13 @@ const MyPageProfile = () => {
                 </p>
               </div>
             )}
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-2xl mx-auto">
+              {createProfile.isLoading && (
+                <div className="flex justify-center items-center py-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+                  <span className="ml-2 text-gray-600">保存中...</span>
+                </div>
+              )}
               <div className="flex justify-center">
                 <Avatar className="h-24 w-24">
                   <AvatarImage
@@ -148,11 +157,28 @@ const MyPageProfile = () => {
               />
               <FormField
                 control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        placeholder="メールアドレス" 
+                        disabled 
+                        className="bg-gray-50 text-gray-600 cursor-not-allowed"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} placeholder="名前" />
+                      <Input {...field} placeholder="名前" className="w-full" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -168,7 +194,7 @@ const MyPageProfile = () => {
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="性別" />
                         </SelectTrigger>
                         <SelectContent>
@@ -193,6 +219,7 @@ const MyPageProfile = () => {
                         type="number"
                         min="1"
                         max="120"
+                        className="w-full"
                       />
                     </FormControl>
                     <FormMessage />
@@ -205,20 +232,24 @@ const MyPageProfile = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} placeholder="自己紹介 (255文字以内)" />
+                      <Input {...field} placeholder="自己紹介 (255文字以内)" className="w-full" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="flex justify-end space-x-2">
-                <Link to="/calendar">
-                  <Button text="保存せずに戻る" className="text-gray-500" />
+              <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
+                <Link to="/calendar" className="w-full sm:w-auto">
+                  <Button 
+                    text="保存せずに戻る" 
+                    className="w-full sm:w-auto text-gray-500 border border-gray-300 hover:bg-gray-50" 
+                  />
                 </Link>
                 <Button
                   text="保存する"
                   type="submit"
-                  className="bg-gray-600 text-white"
+                  className="w-full sm:w-auto bg-gray-600 text-white hover:bg-gray-700 disabled:opacity-50"
+                  disabled={createProfile.isLoading}
                 />
               </div>
             </form>

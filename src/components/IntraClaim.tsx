@@ -35,44 +35,27 @@ const IntraClaim = ({
       >
         <div className="flex items-center space-x-2">
           <div>
-            <p className="text-sm">
-              {intraClaim.departure.start
-                ? dayjs(intraClaim.departure.start).format("M/D")
-                : "日付不明"}
-            </p>
-          </div>
-          <div className="flex flex-col items-center text-xs">
-            <p>
-              {intraClaim.departure.start
-                ? dayjs(intraClaim.departure.start).format("H:mm")
-                : "日付不明"}
-            </p>
-            <p>l</p>
-            <p>
-              {intraClaim.departure.end
-                ? dayjs(intraClaim.departure.end).format("H:mm")
-                : "日付不明"}
-            </p>
+            <p className="text-sm">イントラ依頼</p>
           </div>
           <div className="text-xs">
             {intraClaim.status === "pending" &&
               intraClaim.user.id === user.id && (
                 <p className="">
-                  {intraClaim.intra_user.user_profile?.name}さんに出艇依頼中です
+                  {intraClaim.intra_user.user_profile?.name}さんにイントラ依頼中です
                 </p>
               )}
             {intraClaim.status === "pending" &&
               intraClaim.user.id !== user.id && (
                 <p>
                   {intraClaim.user.user_profile?.name}
-                  さんから出艇依頼が届いています
+                  さんからイントラ依頼が届いています
                 </p>
               )}
             {intraClaim.status === "approve" &&
               intraClaim.user.id === user.id && (
                 <p className="">
                   {intraClaim.intra_user.user_profile?.name}
-                  さんとの出艇が確定しました
+                  さんとのイントラが確定しました
                 </p>
               )}
             {intraClaim.status === "approve" &&

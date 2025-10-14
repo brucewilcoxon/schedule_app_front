@@ -1,11 +1,9 @@
-import { DepartureType } from "./Departure";
 import { IntraClaimType } from "./IntraClaim";
 import { CalendarType } from "./Calendar";
 
 interface NotificationData {
   intraClaim: IntraClaimType;
   comment: string;
-  departure: DepartureType;
   calendar: CalendarType;
   type: string | null;
 }

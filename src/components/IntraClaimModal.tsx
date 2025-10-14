@@ -27,18 +27,9 @@ const IntraClaimModal: React.FC<IntraClaimModalProps> = ({
   handleClose,
   notification,
 }) => {
-  const description = notification?.data?.departure?.description;
-
   // 日時をフォーマット
   dayjs.extend(utc);
   dayjs.extend(timezone);
-
-  const start = notification?.data?.departure?.start
-    ? dayjs(notification.data.departure.start).format("M月D日 H時mm分")
-    : undefined;
-  const end = notification?.data?.departure?.end
-    ? dayjs(notification.data.departure.end).format("M月D日 H時mm分")
-    : undefined;
 
   const approveIntraClaim = useIntraApproveClaim();
   const rejectIntraClaim = useRejectIntraClaim();
@@ -59,21 +50,13 @@ const IntraClaimModal: React.FC<IntraClaimModalProps> = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="mb-5 mt-3 font-bold">
-            {notification?.data?.departure?.user?.user_profile?.name ||
+            {notification?.data?.intraClaim?.user?.user_profile?.name ||
               "不明なユーザー"}
             さんからイントラ依頼が届いています
           </DialogTitle>
           <DialogDescription className="space-y-6">
-            <div className="flex justify-center">
-              <div className=" h-10 items-center w-[50%] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50">
-                {start ? start : "日付不明"}
-              </div>
-              <div className="h-10 items-center w-[50%] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50">
-                {end ? end : "日付不明"}
-              </div>
-            </div>
             <div className="h-10 items-center w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:outline-none  disabled:cursor-not-allowed disabled:opacity-50">
-              {description ? description : "詳細はありません"}
+              イントラ依頼の詳細
             </div>
             <div className=" justify-center space-x-4">
               <Button

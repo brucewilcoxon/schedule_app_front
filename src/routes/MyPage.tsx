@@ -65,17 +65,6 @@ export function MyPage() {
             >
               回答
             </NavLink>
-            {/* <NavLink
-              id="MyPageTab"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-black w-[30%] text-center border-b-2 pb-2 border-black"
-                  : "text-gray-400 w-[30%] text-center"
-              }
-              to="departure"
-            >
-              出艇数
-            </NavLink> */}
           </nav>
           <Outlet context={{ user }} />
         </div>

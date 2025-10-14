@@ -22,6 +22,7 @@ export const loginValidationSchema = z.object({
 });
 
 export const userProfileValidationSchema = z.object({
+  email: z.string().email("正しいメールアドレスを入力してください").optional(),
   name: z.string().optional(),
   gender: z.string().optional(),
   age: z.string().optional(),
@@ -55,10 +56,3 @@ export const CalendarEventValidationShema = z.object({
   isDelayed: z.boolean().optional(),
 });
 
-export const DepartureValidationShema = z.object({
-  date: z.string({ required_error: "日付を選択してください" }),
-  start: z.string({ required_error: "開始時間を入力してください" }),
-  end: z.string({ required_error: "終了時間を入力してください" }),
-  intra_user_id: z.number().optional(),
-  description: z.string().optional(),
-});

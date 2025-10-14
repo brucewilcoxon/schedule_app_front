@@ -61,7 +61,7 @@ const Login = () => {
         
         <div className="w-full px-9 animate-slide-up z-10">
           <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 shadow-2xl">
-            <div className="flex flex-col items-left mb-14 ">
+            <div className="flex flex-col items-left mb-12">
    
               <h2 className="text-xl md:text-3xl font-semibold tracking-wide">
                 Login to Mrservice

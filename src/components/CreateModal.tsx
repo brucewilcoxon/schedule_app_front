@@ -6,7 +6,6 @@ import { Button } from "../@/components/ui/button";
 import CreateNote from "./CreateNote";
 import CreateCalendarEvent from "./CreateCalendarEvent";
 import { Dialog, DialogContent } from "../@/components/ui/dialog";
-import CreateDepartureModal from "./CreateDepartureModal";
 
 const CreateModal: React.FC<CreateHeaderModalProps> = ({
   modalOpen,
@@ -26,14 +25,6 @@ const CreateModal: React.FC<CreateHeaderModalProps> = ({
       case "/question":
         return (
           <CreateQuestion
-            currentLocation={currentLocation}
-            modalOpen={modalOpen}
-            clickModalClose={clickModalClose}
-          />
-        );
-      case "/departure":
-        return (
-          <CreateDepartureModal
             currentLocation={currentLocation}
             modalOpen={modalOpen}
             clickModalClose={clickModalClose}

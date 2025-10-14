@@ -61,12 +61,6 @@ export const API_ROUTES = {
     UPDATE: (id: number) => `/api/users/${id}`,
     DELETE: (id: number) => `/api/users/${id}`,
   },
-  DEPARTURE: {
-    LIST: "/api/departures",
-    BASE: "/api/departure",
-    RANKINGS: "/api/departures/rankings",
-    STATUS: "/api/departures/status",
-  },
   ANSWER: {
     LIST: "/api/answers",
     BASE: "/api/answer",

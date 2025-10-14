@@ -10,7 +10,7 @@
 }
 
 .calendar-container .fc-header-toolbar {
-  background: linear-gradient(135deg, #1c75f9 0%, #69c4f5 100%);
+  background: linear-gradient(135deg, #69c4f5 0%, #69c4f5 100%);
   color: white;
   padding: 16px 20px;
   margin: 0;

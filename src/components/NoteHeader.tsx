@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../@/components/ui/dropdown-menu";
-import { useLogout } from "../queries/AuthQuery";
+import { useLogout, useGetUser } from "../queries/AuthQuery";
 import {
   useAllReadNotifications,
   useGetNotifications,
@@ -22,8 +22,16 @@ import { ScrollArea } from "../@/components/ui/scroll-area";
 import { NotificationItem } from "../types/Notification";
 import IntraClaimModal from "./IntraClaimModal";
 import { Button } from "../@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "../@/components/ui/avatar";
+import { format } from "date-fns";
+import { ja } from "date-fns/locale";
 
-const NoteHeader = () => {
+interface NoteHeaderProps {
+  searchTerm?: string;
+  setSearchTerm?: (term: string) => void;
+}
+
+const NoteHeader = ({ searchTerm = "", setSearchTerm }: NoteHeaderProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState("");
@@ -35,6 +43,7 @@ const NoteHeader = () => {
   const logoutOutMutation = useLogout();
   const { data: notifications } = useGetNotifications();
   const allReadNotifications = useAllReadNotifications();
+  const { data: user } = useGetUser();
 
   const unreadNotifications = notifications?.filter(
     (notification: NotificationItem) => notification.read_at === null
@@ -63,20 +72,34 @@ const NoteHeader = () => {
   };
 
   return (
-    <div>
+    <div className="sticky top-0 z-10 backdrop-blur-lg">
     <div>
       <div className="flex h-14 mb-3 p-2 gap-x-2 shadow-md  items-center justify-end relative">
-                 <div className="flex items-center absolute left-2 top-2">
+        <div className="flex items-center absolute left-2 top-2">
           <Link to="/myPage/profile">
             <Button 
-              className="w-10 h-10 p-0 bg-blue-500 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 border-0 rounded-lg" 
+              className="w-10 h-10 p-0 bg-transparent text-white shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 border-0 rounded-lg" 
               size="icon"
             >
-              <ProfileIcon className="text-lg" />
+              <Avatar className="w-8 h-8">
+                <AvatarImage
+                  src={
+                    user?.user_profile?.profile_image 
+                      ? `${process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000'}/${user.user_profile.profile_image}` 
+                      : user?.user_profile?.gender === 'female' 
+                        ? '/female.jpg' 
+                        : '/male.jpg'
+                  }
+                  alt={user?.user_profile?.name || "Profile Image"}
+                />
+                <AvatarFallback className="text-xs">
+                  {user?.user_profile?.name?.charAt(0) || <ProfileIcon className="text-sm" />}
+                </AvatarFallback>
+              </Avatar>
             </Button>
           </Link>
          </div>
-        {["/question", "/timeLine"].includes(currentLocation) && (
+        {["/question", "/timeLine", "/windNote"].includes(currentLocation) && (
           <button 
             className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transform hover:scale-110 active:scale-95 transition-all duration-200 ease-in-out" 
             onClick={searchClick}
@@ -131,20 +154,56 @@ const NoteHeader = () => {
                       {/* Display different content based on notification type */}
                       {notification.type === "calendar_created" && (
                         <div>
-                          <div className="font-semibold text-green-600">📅 新しいスケジュール</div>
+                          <div className="font-semibold text-green-600">
+                            📅 新しいスケジュール
+                            {notification.updated_at && (
+                              <span className="text-xs font-normal text-gray-500 ml-2">
+                                ({format(new Date(notification.updated_at), "MM/dd HH:mm", { locale: ja })})
+                              </span>
+                            )}
+                          </div>
                           <div className="text-gray-700">{notification.data?.calendar?.vehicle_info || notification.data?.calendar?.repair_type || "スケジュール"}</div>
+                          {notification.data?.calendar?.start && (
+                            <div className="text-sm text-gray-500 mt-1">
+                              開始日: {format(new Date(notification.data.calendar.start), "yyyy年MM月dd日(E)", { locale: ja })}
+                            </div>
+                          )}
                         </div>
                       )}
                       {notification.type === "calendar_updated" && (
                         <div>
-                          <div className="font-semibold text-blue-600">✏️ スケジュール更新</div>
+                          <div className="font-semibold text-blue-600">
+                            ✏️ スケジュール更新
+                            {notification.updated_at && (
+                              <span className="text-xs font-normal text-gray-500 ml-2">
+                                ({format(new Date(notification.updated_at), "MM/dd HH:mm", { locale: ja })})
+                              </span>
+                            )}
+                          </div>
                           <div className="text-gray-700">{notification.data?.calendar?.vehicle_info || notification.data?.calendar?.repair_type || "スケジュール"}</div>
+                          {notification.data?.calendar?.start && (
+                            <div className="text-sm text-gray-500 mt-1">
+                              開始日: {format(new Date(notification.data.calendar.start), "yyyy年MM月dd日(E)", { locale: ja })}
+                            </div>
+                          )}
                         </div>
                       )}
                       {notification.type === "calendar_deleted" && (
                         <div>
-                          <div className="font-semibold text-red-600">🗑️ スケジュール削除</div>
+                          <div className="font-semibold text-red-600">
+                            🗑️ スケジュール削除
+                            {notification.updated_at && (
+                              <span className="text-xs font-normal text-gray-500 ml-2">
+                                ({format(new Date(notification.updated_at), "MM/dd HH:mm", { locale: ja })})
+                              </span>
+                            )}
+                          </div>
                           <div className="text-gray-700">{notification.data?.calendar?.vehicle_info || notification.data?.calendar?.repair_type || "スケジュール"}</div>
+                          {notification.data?.calendar?.start && (
+                            <div className="text-sm text-gray-500 mt-1">
+                              開始日: {format(new Date(notification.data.calendar.start), "yyyy年MM月dd日(E)", { locale: ja })}
+                            </div>
+                          )}
                         </div>
                       )}
                       {/* Default case for other notification types */}
@@ -170,7 +229,7 @@ const NoteHeader = () => {
         </DropdownMenu>
 
         <button
-          className="text-white bg-blue-500 w-10 h-10 rounded-md mx-3 hover:bg-blue-700 active:bg-gray-800 transform hover:scale-110 active:scale-95 transition-all duration-200 ease-in-out shadow-lg hover:shadow-xl"
+          className="text-white bg-gray-500 w-10 h-10 rounded-md mx-3 active:bg-gray-800 transform hover:scale-110 active:scale-95 transition-all duration-200 ease-in-out shadow-lg hover:shadow-xl"
           onClick={clickModalOpen}
         >
           <EditIcon className="transition-transform duration-200 hover:rotate-12" />
@@ -187,6 +246,8 @@ const NoteHeader = () => {
           <input
             className="w-full h-10  bg-custom-white rounded-md border border-gray-700 px-2"
             placeholder="検索"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm?.(e.target.value)}
           />
         </div>
       )}

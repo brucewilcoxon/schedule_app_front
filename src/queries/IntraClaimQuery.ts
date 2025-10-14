@@ -6,7 +6,7 @@ export const useGetIntraClaims = () => {
   return useQuery("intraClaims", () => api.getIntraClaims());
 };
 
-export const useShowDeparture = (id: number) => {
+export const useShowIntraClaim = (id: number) => {
   return useQuery(["intraClaims", id], () => api.showIntraClaim(id));
 };
 
@@ -15,7 +15,6 @@ export const useIntraApproveClaim = () => {
 
   return useMutation(api.IntraApproveClaim, {
     onSuccess: () => {
-      queryClient.invalidateQueries("departures");
       queryClient.invalidateQueries("intraClaims");
       queryClient.invalidateQueries("notifications");
       toast.success("イントラ依頼を承諾しました");
@@ -31,7 +30,6 @@ export const useRejectIntraClaim = () => {
 
   return useMutation(api.rejectIntraClaim, {
     onSuccess: () => {
-      queryClient.invalidateQueries("departures");
       queryClient.invalidateQueries("intraClaims");
       queryClient.invalidateQueries("notifications");
       toast.success("イントラ依頼を取り下げました");

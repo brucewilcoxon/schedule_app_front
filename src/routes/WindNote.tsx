@@ -69,7 +69,7 @@ const WindNote = () => {
               <h1 className="font-bold text-lg">{note.title}</h1>
               <p className="whitespace-pre-line break-all">{note.content}</p>
             </div>
-            {user?.id === note.user.id && (
+            {(user?.id === note.user.id || user?.role === 'manager') && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button>

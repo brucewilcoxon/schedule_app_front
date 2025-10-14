@@ -67,7 +67,7 @@ const Question = ({
             </p>
           </div>
           <div>
-            {user?.id === question.user.id && (
+            {(user?.id === question.user.id || user?.role === 'manager') && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button>

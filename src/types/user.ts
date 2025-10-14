@@ -13,6 +13,7 @@ export interface User {
 }
 
 export type Profile = {
+  email?: string | undefined;
   name?: string | undefined;
   gender?: string | undefined;
   age?: string | undefined;
