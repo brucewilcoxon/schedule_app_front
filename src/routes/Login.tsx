@@ -59,11 +59,9 @@ const Login = () => {
           />
         </div>
         
-        <div className="w-full px-9 animate-slide-up z-10">
+        <div className="w-full px-9 animate-slide-up z-10 pt-[130px] ">
           <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 shadow-2xl">
-            <div className="flex flex-col items-left mb-12">
-   
-          
+            <div className="flex flex-col items-left">
             </div>
             <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col space-y-6">
             <div className="relative">
