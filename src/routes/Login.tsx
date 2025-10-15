@@ -63,9 +63,7 @@ const Login = () => {
           <div className="bg-white/20 backdrop-blur-md rounded-2xl p-8 border border-white/30 shadow-2xl">
             <div className="flex flex-col items-left mb-12">
    
-              <h2 className="text-xl md:text-3xl font-semibold tracking-wide">
-                Login to Mrservice
-              </h2>
+          
             </div>
             <form onSubmit={handleSubmit(onsubmit)} className="flex flex-col space-y-6">
             <div className="relative">
@@ -120,8 +118,8 @@ const Login = () => {
                 text={signInMutation.isLoading ? "ログイン中..." : "ログイン"}
                 className={`w-full transition-all duration-500 ${
                   signInMutation.isLoading
-                    ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 animate-pulse relative overflow-hidden"
-                    : "bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-700 transform hover:scale-105"
+                    ? "bg-gradient-to-r from-cyan-400 via-black-500 to-blue-600 animate-pulse relative overflow-hidden"
+                    : "bg-gradient-to-r from-cyan-400 via-black-500 to-blue-600 hover:from-blue-500 hover:to-blue-700 transform hover:scale-105"
                 } text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl`}
                 disabled={signInMutation.isLoading}
               >

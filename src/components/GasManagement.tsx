@@ -8,6 +8,7 @@ import GasCreateModal from './GasCreateModal';
 import GasEditModal from './GasEditModal';
 import Layout from './Layout';
 import NoteHeader from './NoteHeader';
+import RequireAuth from './RequireAuth';
 
 const GasManagement: React.FC = () => {
   const [gasData, setGasData] = useState<GasApiResponse | null>(null);
@@ -121,113 +122,119 @@ const GasManagement: React.FC = () => {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">データを読み込み中...</p>
+      <RequireAuth>
+        <Layout>
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">データを読み込み中...</p>
+            </div>
           </div>
-        </div>
-      </Layout>
+        </Layout>
+      </RequireAuth>
     );
   }
 
   if (error) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="text-red-600 text-xl mb-4">エラーが発生しました</div>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <button
-              onClick={loadGasData}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              再試行
-            </button>
+      <RequireAuth>
+        <Layout>
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="text-red-600 text-xl mb-4">エラーが発生しました</div>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={loadGasData}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                再試行
+              </button>
+            </div>
           </div>
-        </div>
-      </Layout>
+        </Layout>
+      </RequireAuth>
     );
   }
 
   return (
-    <Layout>
-      <NoteHeader />
-      <div className="px-4 py-6">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Gas Management System</h1>
-          <p className="mt-1 text-sm text-gray-600">ガス管理システム</p>
-        </div>
-
-        {/* Summary Section */}
-        {gasData?.summary && (
-          <GasSummary summary={gasData.summary} />
-        )}
-
-        {/* Filters Section */}
-        <GasFilters
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          gasTypes={gasTypes}
-          prefectures={prefectures}
-          processOptions={processOptions}
-        />
-
-        {/* Data List Section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="px-4 py-3 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-              <h2 className="text-lg font-semibold text-gray-900">ガスデータ一覧</h2>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <button
-                  onClick={handleExportCSV}
-                  className="px-3 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  CSV Download
-                </button>
-                <button
-                  onClick={() => setShowCreateModal(true)}
-                  className="px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  + Register New
-                </button>
-              </div>
-            </div>
+    <RequireAuth>
+      <Layout>
+        <NoteHeader />
+        <div className="px-4 py-6">
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">Gas Management System</h1>
+            <p className="mt-1 text-sm text-gray-600">ガス管理システム</p>
           </div>
 
-          <GasDataList
-            dailyData={gasData?.daily_data || []}
+          {/* Summary Section */}
+          {gasData?.summary && (
+            <GasSummary summary={gasData.summary} />
+          )}
+
+          {/* Filters Section */}
+          <GasFilters
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            gasTypes={gasTypes}
+            prefectures={prefectures}
             processOptions={processOptions}
-            onEdit={setEditingGas}
-            onDelete={handleDeleteGas}
           />
+
+          {/* Data List Section */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-4 py-3 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <h2 className="text-lg font-semibold text-gray-900">ガスデータ一覧</h2>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    onClick={handleExportCSV}
+                    className="px-3 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    CSV Download
+                  </button>
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className="px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    + Register New
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <GasDataList
+              dailyData={gasData?.daily_data || []}
+              processOptions={processOptions}
+              onEdit={setEditingGas}
+              onDelete={handleDeleteGas}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Modals */}
-      {showCreateModal && (
-        <GasCreateModal
-          onClose={() => setShowCreateModal(false)}
-          onSubmit={handleCreateGas}
-          gasTypes={gasTypes}
-          prefectures={prefectures}
-          processOptions={processOptions}
-        />
-      )}
+        {/* Modals */}
+        {showCreateModal && (
+          <GasCreateModal
+            onClose={() => setShowCreateModal(false)}
+            onSubmit={handleCreateGas}
+            gasTypes={gasTypes}
+            prefectures={prefectures}
+            processOptions={processOptions}
+          />
+        )}
 
-      {editingGas && (
-        <GasEditModal
-          gas={editingGas}
-          onClose={() => setEditingGas(null)}
-          onSubmit={handleUpdateGas}
-          gasTypes={gasTypes}
-          prefectures={prefectures}
-          processOptions={processOptions}
-        />
-      )}
-    </Layout>
+        {editingGas && (
+          <GasEditModal
+            gas={editingGas}
+            onClose={() => setEditingGas(null)}
+            onSubmit={handleUpdateGas}
+            gasTypes={gasTypes}
+            prefectures={prefectures}
+            processOptions={processOptions}
+          />
+        )}
+      </Layout>
+    </RequireAuth>
   );
 };
 

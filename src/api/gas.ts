@@ -1,6 +1,5 @@
 import { GasType, GasFilter, GasApiResponse } from '../types/Gas';
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
+import { apiClient } from './commonApi';
 
 export const gasApi = {
   // Get all gas data with filters
@@ -13,100 +12,36 @@ export const gasApi = {
     if (filters?.prefecture) params.append('prefecture', filters.prefecture);
     if (filters?.process) params.append('process', filters.process);
 
-    const response = await fetch(`${API_BASE_URL}gas?${params.toString()}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch gas data');
-    }
-
-    return response.json();
+    const response = await apiClient.get(`/api/gas?${params.toString()}`);
+    return response.data;
   },
 
   // Create new gas record
   async createGas(gasData: Omit<GasType, 'id' | 'created_at' | 'updated_at'>): Promise<GasType> {
-    const response = await fetch(`${API_BASE_URL}gas`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(gasData),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to create gas record');
-    }
-
-    return response.json();
+    const response = await apiClient.post('/api/gas', gasData);
+    return response.data;
   },
 
   // Update gas record
   async updateGas(id: number, gasData: Partial<GasType>): Promise<GasType> {
-    const response = await fetch(`${API_BASE_URL}gas/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(gasData),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update gas record');
-    }
-
-    return response.json();
+    const response = await apiClient.put(`/api/gas/${id}`, gasData);
+    return response.data;
   },
 
   // Delete gas record
   async deleteGas(id: number): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}gas/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete gas record');
-    }
+    await apiClient.delete(`/api/gas/${id}`);
   },
 
   // Get available gas types
   async getGasTypes(): Promise<string[]> {
-    const response = await fetch(`${API_BASE_URL}gas-types`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch gas types');
-    }
-
-    return response.json();
+    const response = await apiClient.get('/api/gas-types');
+    return response.data;
   },
 
   // Get available prefectures
   async getPrefectures(): Promise<string[]> {
-    const response = await fetch(`${API_BASE_URL}prefectures`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch prefectures');
-    }
-
-    return response.json();
+    const response = await apiClient.get('/api/prefectures');
+    return response.data;
   },
 };
