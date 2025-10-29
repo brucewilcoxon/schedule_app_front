@@ -20,7 +20,7 @@ const GasCreateModal: React.FC<GasCreateModalProps> = ({
   modalOpen = true,
 }) => {
   // Master lists
-  const gasTypeOptions = ["R452A", "R513a", "R32 (HFO)", "R410A", "R408A", "R407C (HFC)"];
+  const gasTypeOptions = ["1. R452A", "2. R513a", "3. R32 (HFO)", "4. R410A", "5. R408A", "6. R407C (HFC)"];
   const prefectureOptions = [
     "北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県",
     "茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県",
