@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24" role="img" aria-label="Cloud upload icon">
-  <!-- Cloud outline -->
-  <path d="M20.39 15.37A4.5 4.5 0 0 0 17.5 8a5.5 5.5 0 0 0-10.63 1.14A3.5 3.5 0 0 0 7 19.5h11.5a2 2 0 0 0 1.89-4.13z"
-        fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Upload arrow (shaft + head) -->
-  <path d="M12 16.5V9.2" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M9.75 11.45L12 9.2l2.25 2.25" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
