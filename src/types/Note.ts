@@ -1,4 +1,3 @@
-import { number } from "zod";
 import { User } from "./user";
 
 export interface Note {

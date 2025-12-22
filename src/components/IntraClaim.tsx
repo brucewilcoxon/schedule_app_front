@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { IntraClaimType } from "../types/IntraClaim";
-import dayjs from "dayjs";
 import { User } from "../types/user";
 import MypageIntraModal from "./MypageIntraModal";
 

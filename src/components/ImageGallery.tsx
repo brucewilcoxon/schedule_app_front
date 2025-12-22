@@ -36,7 +36,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, className = "" }) =
             >
               <img
                 src={imageUrl}
-                alt={`Image ${index + 1}`}
+                alt={`${index + 1}`}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   console.error('Image failed to load:', imageUrl, 'Original path:', imagePath);

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
@@ -33,9 +32,6 @@ const WindNote = ({
 
   const openDialog = () => {
     setIsDialogOpen(true);
-  };
-  const closeDialog = () => {
-    setIsDialogOpen(false);
   };
 
   const clickModalOpen = () => {

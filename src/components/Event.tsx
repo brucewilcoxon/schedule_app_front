@@ -21,19 +21,6 @@ const Event: React.FC<EventProps> = ({ event }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { data: user } = useGetUser();
 
-  // Extract status from content field
-  const getStatusFromContent = (content: string | undefined): string => {
-    if (!content) return "未開始";
-    const statusMatch = content.match(/ステータス: (.+)/);
-    return statusMatch ? statusMatch[1] : "未開始";
-  };
-
-  // Check if event is delayed
-  const isDelayed = (content: string | undefined): boolean => {
-    if (!content) return false;
-    const delayedMatch = content.match(/延期されましたか？: (.+)/);
-    return delayedMatch ? delayedMatch[1] === "true" : false;
-  };
 
   const getStatusColor = (status: string, isDelayed: boolean): string => {
     if (isDelayed) {
@@ -63,11 +50,6 @@ const Event: React.FC<EventProps> = ({ event }) => {
     return event.vehicle_info || event.repair_type || "スケジュール";
   };
 
-  // Extract workers information
-  const getWorkersInfo = (): string => {
-    if (!event.workers || event.workers.length === 0) return "";
-    return `作業員: ${event.workers.join(', ')}`;
-  };
 
   // Format creation date and time
   const formatCreationDateTime = (): string => {
@@ -86,9 +68,6 @@ const Event: React.FC<EventProps> = ({ event }) => {
 
   const openDialog = () => {
     setIsDialogOpen(true);
-  };
-  const closeDialog = () => {
-    setIsDialogOpen(false);
   };
 
   const clickModalOpen = () => {

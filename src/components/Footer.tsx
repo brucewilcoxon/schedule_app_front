@@ -5,7 +5,6 @@ import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
-import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 
 const Footer = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

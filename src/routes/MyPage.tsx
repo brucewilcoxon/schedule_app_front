@@ -1,18 +1,12 @@
-import React, { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../@/components/ui/avatar";
+import React from "react";
 import NoteHeader from "../components/NoteHeader";
-import { Button } from "../@/components/ui/button";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { useGetUser } from "../queries/AuthQuery";
 import RequireAuth from "../components/RequireAuth";
 import Layout from "../components/Layout";
 
 export function MyPage() {
   const { data: user } = useGetUser();
-  const [open, setOpen] = useState(false);
-  const close = () => {
-    setOpen(false);
-  };
   return (
     <Layout>
       <RequireAuth>

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { API_ROUTES, apiClient } from "./commonApi";
 
 export const getNotifications = async () => {

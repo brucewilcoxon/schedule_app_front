@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useUpdateAnswer } from "../queries/AnswerQuery";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAnswerValidationShema } from "../@/components/ui/validationSchema";
-import { Input } from "../@/components/ui/input";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../@/components/ui/dialog";
 import { Button } from "../@/components/ui/button";
 import {
@@ -97,7 +95,7 @@ const EditAnswerModal: React.FC<EditAnswewrModalProps> = ({
               )}
             />
             <div className="flex justify-end items-center">
-              <a onClick={clickModalClose}>キャンセル</a>
+              <button type="button" onClick={clickModalClose} className="text-gray-600 hover:text-gray-800">キャンセル</button>
               <Button className="ml-3 bg-gray-600" type="submit">
                 編集する
               </Button>

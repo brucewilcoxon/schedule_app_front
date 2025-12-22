@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useShowNote, useUpdateFavorite } from "../queries/NoteQuery";
-import { Note, NoteWithFavorites } from "../types/Note";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import {
@@ -10,8 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../@/components/ui/dropdown-menu";
-import AnserModal from "../components/AnswerModal";
-import QuestionAlertDialog from "../components/QuestionAlertDialog";
 import NoteAlertDialog from "../components/DeleteAlertDialog";
 import EditNoteModal from "../components/EditNoteModal";
 import NoteHeader from "../components/NoteHeader";
@@ -28,7 +25,6 @@ import ImageGallery from "../components/ImageGallery";
 const WindNote = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isAnswerOpen, setIsAnswerOpen] = useState(false);
   const { id } = useParams();
   const noteId = Number(id);
   const { data: note, isFetching } = useShowNote(noteId);
@@ -42,15 +38,6 @@ const WindNote = () => {
   };
   const openDialog = () => {
     setIsDialogOpen(true);
-  };
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-  };
-  const clickAnswerOpen = () => {
-    setIsAnswerOpen(true);
-  };
-  const clickAnswerClose = () => {
-    setIsAnswerOpen(false);
   };
 
   if (!note || !user) {

@@ -2,9 +2,6 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 
 import { cn } from "../../lib/utils";
-import { Input } from "./input";
-import { ShadTextarea } from "./textarea";
-import AutoAdjustTextarea from "../../../components/AutoTextArea";
 
 const Drawer = ({
   shouldScaleBackground = true,

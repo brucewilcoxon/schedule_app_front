@@ -1,4 +1,3 @@
-import axios from "axios";
 import { IntraClaimType } from "../types/IntraClaim";
 import { API_ROUTES, apiClient } from "./commonApi";
 

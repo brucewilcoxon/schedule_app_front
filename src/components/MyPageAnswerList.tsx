@@ -5,7 +5,7 @@ import { useGetUser } from "../queries/AuthQuery";
 
 const MyPageAnswerList = () => {
   const { data: user } = useGetUser();
-  const { data: answers, isLoading, isFetching } = useGetAnswers(user?.id);
+  const { data: answers, isLoading } = useGetAnswers(user?.id);
   return (
     <div className="mb-5">
       <div>

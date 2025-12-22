@@ -1,4 +1,3 @@
-import axios from "axios";
 import { WindAnswer, WindIdAnswer } from "../types/Question";
 import { API_ROUTES, apiClient } from "./commonApi";
 

@@ -6,7 +6,6 @@ import { signUpValidationShema } from "../@/components/ui/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "../components/Button";
 import { useSignUp } from "../queries/AuthQuery";
-import { z } from "zod";
 import Layout from "../components/Layout";
 
 const SignUp = () => {

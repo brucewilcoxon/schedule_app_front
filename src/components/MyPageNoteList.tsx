@@ -1,5 +1,4 @@
 import React from "react";
-import HeaderTab from "./HeaderTab";
 import { useNotes } from "../queries/NoteQuery";
 import WindNote from "./WindNote";
 import { useGetUser } from "../queries/AuthQuery";

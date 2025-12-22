@@ -1,7 +1,6 @@
 // import { Dialog, DialogContent } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Note } from "../types/Note";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createAnswerValidationShema } from "../@/components/ui/validationSchema";
 import { z } from "zod";
@@ -15,7 +14,6 @@ import {
 import { Button } from "../@/components/ui/button";
 import { ShadTextarea } from "../@/components/ui/textarea";
 import { WindAnswer } from "../types/Question";
-import { createAnswer } from "../api/answerApi";
 import { useCreateAnswer } from "../queries/AnswerQuery";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../@/components/ui/dialog";
 import ImageUpload from "./ImageUpload";
@@ -84,7 +82,7 @@ const AnserModal: React.FC<ModalProps> = ({
               />
 
               <div className="flex justify-end items-center">
-                <a onClick={clickModalClose}>キャンセル</a>
+                <button type="button" onClick={clickModalClose} className="text-gray-600 hover:text-gray-800">キャンセル</button>
                 <Button className="ml-3 bg-gray-600" type="submit">
                   回答する
                 </Button>

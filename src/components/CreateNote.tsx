@@ -131,7 +131,7 @@ const CreateNote: React.FC<CreateHeaderModalProps> = ({ clickModalClose }) => {
         />
 
         <div className="flex justify-end items-center">
-          <a onClick={clickModalClose}>キャンセル</a>
+          <button type="button" onClick={clickModalClose} className="text-gray-600 hover:text-gray-800">キャンセル</button>
           <Button className="ml-3 bg-gray-600" type="submit">
             投稿する
           </Button>

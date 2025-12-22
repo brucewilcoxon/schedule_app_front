@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { WindAnswer, WindIdAnswer } from "../types/Question";
+import { WindIdAnswer } from "../types/Question";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ja";
-import { Link } from "react-router-dom";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   DropdownMenu,
@@ -27,9 +25,6 @@ const Answer: React.FC<AnswerProps> = ({ answer }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const openDialog = () => {
     setIsDialogOpen(true);
-  };
-  const closeDialog = () => {
-    setIsDialogOpen(false);
   };
   const clickModalOpen = () => {
     setModalOpen(true);

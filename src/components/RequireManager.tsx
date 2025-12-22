@@ -1,4 +1,4 @@
-﻿import React, { FC, ReactNode, useEffect } from "react";
+import React, { FC, ReactNode, useEffect } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { Navigate } from "react-router-dom";
 import { useGetUser } from "../queries/AuthQuery";

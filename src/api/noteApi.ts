@@ -1,4 +1,3 @@
-import axios from "axios";
 import { DeleteNote, Favorite, Note, NoteWithFavorites } from "../types/Note";
 import { API_ROUTES, apiClient } from "./commonApi";
 

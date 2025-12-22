@@ -1,7 +1,6 @@
 // import { Dialog, DialogContent } from "@mui/material";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Note } from "../types/Note";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createQuestionValidationShema } from "../@/components/ui/validationSchema";
 import { z } from "zod";
@@ -92,7 +91,7 @@ const EditQuestionModal: React.FC<ModalProps> = ({
               />
 
               <div className="flex justify-end items-center">
-                <a onClick={clickModalClose}>キャンセル</a>
+                <button type="button" onClick={clickModalClose} className="text-gray-600 hover:text-gray-800">キャンセル</button>
                 <Button className="ml-3 bg-gray-600" type="submit">
                   編集する
                 </Button>

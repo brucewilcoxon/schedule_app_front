@@ -6,7 +6,7 @@ type RequireAuthProps = {
   children?: ReactNode;
 };
 export const RequireAuth: FC<RequireAuthProps> = ({ children }) => {
-  const { data: user, isLoading, isError } = useGetUser();
+  const { data: user, isLoading } = useGetUser();
 
   if (isLoading) {
     return <TailSpin height="80" width="80" color="#00aab9" />;

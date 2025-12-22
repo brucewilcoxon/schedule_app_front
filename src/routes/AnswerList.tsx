@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { WindAnswer, WindIdAnswer, WindIdQuestion } from "../types/Question";
 import { useParams } from "react-router-dom";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -34,7 +33,7 @@ const AnswerList = () => {
   const [isAnswerOpen, setIsAnswerOpen] = useState(false);
   const { id } = useParams();
   const questionId = Number(id);
-  const { data: question, isLoading } = useShowQuestion(questionId);
+  const { data: question } = useShowQuestion(questionId);
   const { data: user } = useGetUser();
   const answers = question?.answers;
 
@@ -46,9 +45,6 @@ const AnswerList = () => {
   };
   const openDialog = () => {
     setIsDialogOpen(true);
-  };
-  const closeDialog = () => {
-    setIsDialogOpen(false);
   };
   const clickAnswerOpen = () => {
     setIsAnswerOpen(true);

@@ -46,9 +46,6 @@ const Question = ({
   const openDialog = () => {
     setIsDialogOpen(true);
   };
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-  };
   const clickAnswerOpen = () => {
     setIsAnswerOpen(true);
   };

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as api from "../api/authApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { User, LoginCredentials } from "../types/user";
+import { LoginCredentials } from "../types/user";
 import { AxiosError } from "axios";
 
 export const useGetUser = () => {
