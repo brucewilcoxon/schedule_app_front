@@ -18,6 +18,7 @@ import { WindAnswer } from "../types/Question";
 import { createAnswer } from "../api/answerApi";
 import { useCreateAnswer } from "../queries/AnswerQuery";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../@/components/ui/dialog";
+import ImageUpload from "./ImageUpload";
 
 interface ModalProps {
   modalOpen: boolean;
@@ -32,6 +33,10 @@ const AnserModal: React.FC<ModalProps> = ({
 }) => {
   const form = useForm<WindAnswer>({
     resolver: zodResolver(createAnswerValidationShema),
+    defaultValues: {
+      content: "",
+      images: [] as string[],
+    },
   });
 
   const createAnswer = useCreateAnswer();
@@ -56,6 +61,22 @@ const AnserModal: React.FC<ModalProps> = ({
                   <FormItem>
                     <FormControl>
                       <ShadTextarea {...field} placeholder="内容" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField<WindAnswer>
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <ImageUpload
+                        images={Array.isArray(field.value) ? field.value : []}
+                        onImagesChange={field.onChange}
+                        maxImages={10}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

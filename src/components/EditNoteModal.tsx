@@ -24,6 +24,7 @@ import { ja } from "date-fns/locale";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { Calendar } from "../@/components/ui/calendar";
 import dayjs from "dayjs";
+import ImageUpload from "./ImageUpload";
 
 interface EditNoteModalProps {
   modalOpen: boolean;
@@ -48,8 +49,20 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
     defaultValues: {
       title: note.title,
       content: note.content,
+      date: note.date,
+      images: Array.isArray((note as any).images) ? (note as any).images : [],
     },
   });
+
+  // Reset form when note changes to ensure images are loaded
+  useEffect(() => {
+    form.reset({
+      title: note.title,
+      content: note.content,
+      date: note.date,
+      images: Array.isArray((note as any).images) ? (note as any).images : [],
+    });
+  }, [note, form]);
 
   return (
     <div>
@@ -68,7 +81,6 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
                     <FormControl>
                       <Input
                         {...field}
-                        defaultValue={note.title}
                         placeholder="タイトル"
                       />
                     </FormControl>
@@ -79,7 +91,6 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
               <FormField
                 control={form.control}
                 name="content"
-                defaultValue={note.content}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -92,7 +103,6 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
               <FormField
                 control={form.control}
                 name="date"
-                defaultValue={note.date}
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <Popover>
@@ -134,6 +144,22 @@ const EditNoteModal: React.FC<EditNoteModalProps> = ({
                         />
                       </PopoverContent>
                     </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <ImageUpload
+                        images={Array.isArray(field.value) ? field.value : []}
+                        onImagesChange={field.onChange}
+                        maxImages={10}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

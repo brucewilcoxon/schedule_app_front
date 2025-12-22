@@ -18,6 +18,7 @@ export const createNote = async (values: Note) => {
     title: values.title,
     content: values.content,
     date: values.date,
+    images: values.images || [],
   });
   return data;
 };
@@ -38,7 +39,12 @@ export const updateNote = async ({
 }) => {
   const { data } = await apiClient.put<Note>(
     `${API_ROUTES.WIND_NOTE.BASE}/${id}`,
-    values
+    {
+      title: values.title,
+      content: values.content,
+      date: values.date,
+      images: values.images || [],
+    }
   );
   return data;
 };

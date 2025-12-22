@@ -23,6 +23,7 @@ import EditQuestionModal from "../components/EditQuestionModal";
 import { useGetUser } from "../queries/AuthQuery";
 import RequireAuth from "../components/RequireAuth";
 import Layout from "../components/Layout";
+import ImageGallery from "../components/ImageGallery";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);
@@ -98,6 +99,9 @@ const AnswerList = () => {
           </div>
           <div className="px-3 my-5">
             <p className="whitespace-pre-line break-all">{question?.content}</p>
+            {question?.images && question.images.length > 0 && (
+              <ImageGallery images={question.images} />
+            )}
           </div>
           <div className=" flex justify-end px-2 text-gray-500 space-x-3">
             <p>{dayjs(question?.created_at).format("YYYY年MM月DD日HH:mm")}</p>

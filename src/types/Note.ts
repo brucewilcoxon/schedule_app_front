@@ -5,6 +5,7 @@ export interface Note {
   title: string;
   date: string;
   content: string;
+  images?: string[];
 }
 
 export interface DeleteNote {
@@ -12,6 +13,7 @@ export interface DeleteNote {
   title: string;
   content: string;
   date: string;
+  images?: string[];
 }
 export interface NoteWithFavorites {
   id: number;
@@ -22,6 +24,7 @@ export interface NoteWithFavorites {
   is_favorited: boolean;
   favorites_count: number;
   note_favorites: Favorite[];
+  images?: string[];
 }
 
 export interface Favorite {

@@ -11,6 +11,7 @@ export interface CalendarWithoutId {
   description?: string;
   is_delayed?: boolean;
   is_absent?: boolean;
+  images?: string[];
 }
 
 export interface CalendarType {
@@ -27,4 +28,5 @@ export interface CalendarType {
   is_delayed?: boolean;
   is_absent?: boolean;
   created_at?: string;
+  images?: string[];
 }

@@ -34,14 +34,17 @@ export const NoteValidationShema = z.object({
   title: z.string({ required_error: "タイトルを入力してください" }),
   content: z.string({ required_error: "内容を入力してください" }),
   date: z.string({ required_error: "出艇日を入力してください" }),
+  images: z.array(z.string()).optional(),
 });
 
 export const createQuestionValidationShema = z.object({
   content: z.string({ required_error: "質問を入力してください" }),
+  images: z.array(z.string()).optional(),
 });
 
 export const createAnswerValidationShema = z.object({
   content: z.string({ required_error: "回答を入力してください" }),
+  images: z.array(z.string()).optional(),
 });
 
 export const CalendarEventValidationShema = z.object({
@@ -49,11 +52,12 @@ export const CalendarEventValidationShema = z.object({
   end: z.string().optional(),
   // New fields for enhanced schedule UI
   vehicleInfo: z.string().optional(),
-  repairType: z.array(z.string()).max(3, { message: "最大3つまで選択できます" }),
+  repairType: z.array(z.string()).max(7, { message: "最大7つまで選択できます" }),
   workType: z.string().optional(),
-  workers: z.array(z.string()).max(3, { message: "最大3人まで選択できます" }),
+  workers: z.array(z.string()).max(7, { message: "最大3人まで選択できます" }),
   status: z.string().optional(),
   description: z.string().optional(),
   isDelayed: z.boolean().optional(),
+  images: z.array(z.string()).optional(),
 });
 

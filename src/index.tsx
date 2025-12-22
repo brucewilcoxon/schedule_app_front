@@ -30,6 +30,7 @@ import RefrigerantCompany from "./routes/RefrigerantCompany";
 import RefrigerantWorkplace from "./routes/RefrigerantWorkplace";
 import RefrigerantDocument from "./routes/RefrigerantDocument";
 import GasManagement from "./components/GasManagement";
+import RepairTypeOptionManagement from "./components/RepairTypeOptionManagement";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -75,6 +76,7 @@ root.render(
           <Route path="document" element={<RefrigerantDocument />} />
         </Route>
         <Route path="/gasManagement" element={<GasManagement />} />
+        <Route path="/repairTypeManagement" element={<RepairTypeOptionManagement />} />
       </Routes>
     </BrowserRouter>
   </QueryClientProvider>

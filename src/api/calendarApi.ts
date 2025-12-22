@@ -21,6 +21,7 @@ export const createCalendarEvent = async (values: CalendarWithoutId) => {
       start: values.start,
       end: values.end,
       is_delayed: values.is_delayed,
+      images: values.images || [],
     }
   );
   return data;
@@ -45,6 +46,7 @@ export const updateCalendarEvent = async ({
       start: values.start,
       end: values.end,
       is_delayed: values.is_delayed,
+      images: values.images || [],
     }
   );
   return data;

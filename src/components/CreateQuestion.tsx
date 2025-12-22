@@ -15,12 +15,17 @@ import { createQuestionValidationShema } from "../@/components/ui/validationSche
 import { CreateHeaderModalProps } from "../types/ModalProps";
 import { WindQuestion } from "../types/Question";
 import { useCreateQuestion } from "../queries/QuestionQuery";
+import ImageUpload from "./ImageUpload";
 const CreateQuestion: React.FC<CreateHeaderModalProps> = ({
   clickModalClose,
 }) => {
   const createQuestion = useCreateQuestion();
   const form = useForm<WindQuestion>({
     resolver: zodResolver(createQuestionValidationShema),
+    defaultValues: {
+      content: "",
+      images: [] as string[],
+    },
   });
   function onSubmit(values: z.infer<typeof createQuestionValidationShema>) {
     createQuestion.mutate(values);
@@ -37,6 +42,22 @@ const CreateQuestion: React.FC<CreateHeaderModalProps> = ({
             <FormItem>
               <FormControl>
                 <ShadTextarea {...field} placeholder="質問" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField<WindQuestion>
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <ImageUpload
+                  images={Array.isArray(field.value) ? field.value : []}
+                  onImagesChange={field.onChange}
+                  maxImages={10}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

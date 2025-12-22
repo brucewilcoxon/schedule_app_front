@@ -24,10 +24,17 @@ import { PopoverContent, PopoverTrigger } from "../@/components/ui/popover";
 import { Calendar } from "../@/components/ui/calendar";
 import { cn } from "../@/lib/utils";
 import dayjs from "dayjs";
+import ImageUpload from "./ImageUpload";
 const CreateNote: React.FC<CreateHeaderModalProps> = ({ clickModalClose }) => {
   const createNote = useCreateNote();
   const form = useForm<Note>({
     resolver: zodResolver(NoteValidationShema),
+    defaultValues: {
+      title: "",
+      content: "",
+      date: "",
+      images: [] as string[],
+    },
   });
 
   function onSubmit(values: z.infer<typeof NoteValidationShema>) {
@@ -102,6 +109,22 @@ const CreateNote: React.FC<CreateHeaderModalProps> = ({ clickModalClose }) => {
                   />
                 </PopoverContent>
               </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <ImageUpload
+                  images={Array.isArray(field.value) ? field.value : []}
+                  onImagesChange={field.onChange}
+                  maxImages={10}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

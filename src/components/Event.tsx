@@ -11,6 +11,7 @@ import { CalendarType } from "../types/Calendar";
 import { useGetUser } from "../queries/AuthQuery";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
+import ImageGallery from "./ImageGallery";
 interface EventProps {
   event: CalendarType;
 }
@@ -138,6 +139,12 @@ const Event: React.FC<EventProps> = ({ event }) => {
                   </div>
                   <p className="text-sm text-gray-700 leading-relaxed font-medium">作業員: {event.workers.join(', ')}</p>
                 </div>
+              )}
+              {event.description && (
+                <p className="text-sm text-gray-600 whitespace-pre-line break-all">{event.description}</p>
+              )}
+              {event.images && event.images.length > 0 && (
+                <ImageGallery images={event.images} />
               )}
             </div>
             <p className="text-sm text-gray-500 font-medium">

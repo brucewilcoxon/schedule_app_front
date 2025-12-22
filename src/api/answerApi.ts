@@ -21,6 +21,7 @@ export const createAnswer = async ({
   const { data } = await apiClient.post<WindAnswer>(API_ROUTES.ANSWER.BASE, {
     question_id: question_id,
     content: values.content,
+    images: values.images || [],
   });
   return data;
 };
@@ -34,7 +35,10 @@ export const updateAnswer = async ({
 }) => {
   const { data } = await apiClient.put<WindAnswer>(
     `${API_ROUTES.ANSWER.BASE}/${id}`,
-    values
+    {
+      content: values.content,
+      images: values.images || [],
+    }
   );
   return data;
 };

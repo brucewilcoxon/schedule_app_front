@@ -11,12 +11,14 @@ import { EventApi } from "@fullcalendar/core";
 import "../App";
 import NoteHeader from "../components/NoteHeader";
 import EditCalendarEventModal from "../components/EditCalendarEventModal";
+import CreateCalendarEvent from "../components/CreateCalendarEvent";
 
 import { CalendarType } from "../types/Calendar";
 import StyleWrapper from "../components/StyleWrapper";
 import RequireAuth from "../components/RequireAuth";
 import Layout from "../components/Layout";
 import "../components/CalendarStyles.css";
+import { Dialog, DialogContent } from "../@/components/ui/dialog";
 
 const WindCalendar = () => {
 
@@ -39,6 +41,10 @@ const WindCalendar = () => {
   // Edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarType | null>(null);
+
+  // Create modal state (open when clicking a date)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createDate, setCreateDate] = useState<string>("");
 
   // Get unique workers from calendar events
   const uniqueWorkers = useMemo(() => {
@@ -611,7 +617,12 @@ const WindCalendar = () => {
                     events={formattedEvents}
                     businessHours={true}
                     displayEventTime={false}
-                    dateClick={(info) => setSelectedDate(new Date(info.date))}
+                    dateClick={(info) => {
+                      const clickedDate = new Date(info.date);
+                      setSelectedDate(clickedDate);
+                      setCreateDate(format(clickedDate, "yyyy-MM-dd"));
+                      setIsCreateModalOpen(true);
+                    }}
                     eventClick={handleEventClick}
                     eventClassNames={eventClassNames}
                     dayCellClassNames={({ date }) => {
@@ -650,6 +661,18 @@ const WindCalendar = () => {
             clickModalClose={handleModalClose}
             calendarEvent={selectedEvent}
           />
+        )}
+        {isCreateModalOpen && (
+          <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+            <DialogContent className="max-w-[375px] xs:max-w-[425px] w-[90vw] max-h-[90vh] overflow-y-auto">
+              <CreateCalendarEvent
+                modalOpen={isCreateModalOpen}
+                clickModalClose={() => setIsCreateModalOpen(false)}
+                currentLocation="/calendar"
+                initialDate={createDate}
+              />
+            </DialogContent>
+          </Dialog>
         )}
       </RequireAuth>
     </Layout>

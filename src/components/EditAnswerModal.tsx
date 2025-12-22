@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUpdateAnswer } from "../queries/AnswerQuery";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +22,7 @@ import {
 import { ShadTextarea } from "../@/components/ui/textarea";
 import { WindAnswer, WindIdAnswer } from "../types/Question";
 import { z } from "zod";
+import ImageUpload from "./ImageUpload";
 
 interface EditAnswewrModalProps {
   modalOpen: boolean;
@@ -39,8 +40,17 @@ const EditAnswerModal: React.FC<EditAnswewrModalProps> = ({
     resolver: zodResolver(createAnswerValidationShema),
     defaultValues: {
       content: answer.content,
+      images: Array.isArray(answer.images) ? answer.images : [],
     },
   });
+
+  // Reset form when answer changes to ensure images are loaded
+  useEffect(() => {
+    form.reset({
+      content: answer.content,
+      images: Array.isArray(answer.images) ? answer.images : [],
+    });
+  }, [answer, form]);
 
   function onSubmit(values: z.infer<typeof createAnswerValidationShema>) {
     updateAnswer.mutate({ id: answer.id, values: values });
@@ -62,9 +72,24 @@ const EditAnswerModal: React.FC<EditAnswewrModalProps> = ({
                 <FormItem>
                   <FormControl>
                     <ShadTextarea
-                      defaultValue={answer.content}
                       {...field}
                       placeholder="質問"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField<WindAnswer>
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <ImageUpload
+                      images={Array.isArray(field.value) ? field.value : []}
+                      onImagesChange={field.onChange}
+                      maxImages={10}
                     />
                   </FormControl>
                   <FormMessage />

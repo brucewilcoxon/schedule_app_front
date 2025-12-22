@@ -18,6 +18,7 @@ import "dayjs/locale/ja";
 import QuestionAlertDialog from "./QuestionAlertDialog";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import ImageGallery from "./ImageGallery";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -95,6 +96,9 @@ const Question = ({
         <div className="px-3 my-5">
           <Link to={`/question/${question.id}/answer`} className="">
             <p className="whitespace-pre-line break-all">{question.content}</p>
+            {question.images && question.images.length > 0 && (
+              <ImageGallery images={question.images} />
+            )}
           </Link>
         </div>
         <div className="flex justify-end px-2 text-gray-500 space-x-3">

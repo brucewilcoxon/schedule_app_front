@@ -7,6 +7,7 @@ export interface CreateHeaderModalProps {
   modalOpen: boolean;
   clickModalClose: () => void;
   currentLocation: string;
+  initialDate?: string;
 }
 
 export interface EditModalProps {

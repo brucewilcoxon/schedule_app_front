@@ -99,5 +99,11 @@ export const API_ROUTES = {
   },
   PREFECTURES: {
     INDEX: '/api/prefectures',
+  },
+  REPAIR_TYPE_OPTION: {
+    INDEX: '/api/repair-type-options',
+    BASE: '/api/repair-type-options',
+    UPDATE: (id: number) => `/api/repair-type-options/${id}`,
+    DELETE: (id: number) => `/api/repair-type-options/${id}`,
   }
 } as const;

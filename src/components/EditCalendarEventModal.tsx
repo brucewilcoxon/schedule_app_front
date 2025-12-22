@@ -45,6 +45,10 @@ import { Checkbox } from "../@/components/ui/checkbox";
 import { useGetUser } from "../queries/AuthQuery";
 import { RadioGroup, RadioGroupItem } from "../@/components/ui/radio-group";
 import { Label } from "../@/components/ui/label";
+import { useGetRepairTypeOptions } from "../queries/RepairTypeOptionQuery";
+import { Link } from "react-router-dom";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ImageUpload from "./ImageUpload";
 
 interface ModalProps {
   modalOpen: boolean;
@@ -60,6 +64,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
   const updateCalendarEvent = useUpdateCalendarEvent();
   const { data: users, isLoading: usersLoading } = useGetUsers();
   const { data: user } = useGetUser();
+  const { data: repairTypeOptions = [], isLoading: repairTypeOptionsLoading } = useGetRepairTypeOptions();
 
   // Parse existing content to extract fields
   const existingFields = {
@@ -86,6 +91,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       start: calendarEvent.start,
       end: dayjs(calendarEvent.end).add(-1, "day").format("YYYY-MM-DD"),
       isDelayed: existingFields.isDelayed,
+      images: calendarEvent.images || [],
     },
   });
 
@@ -105,6 +111,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       status: calendarEvent.status || "未開始",
       description: calendarEvent.description || "",
       isDelayed: calendarEvent.is_delayed || false,
+      images: calendarEvent.images || [],
     };
 
     form.reset({
@@ -117,6 +124,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       start: calendarEvent.start,
       end: dayjs(calendarEvent.end).add(-1, "day").format("YYYY-MM-DD"),
       isDelayed: newExistingFields.isDelayed,
+      images: newExistingFields.images,
     });
   }, [calendarEvent, form]);
 
@@ -131,6 +139,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       start: values.start,
       end: values.end ? dayjs(values.end).add(1, "day").format("YYYY-MM-DD") : values.start,
       is_delayed: values.isDelayed,
+      images: values.images || [],
     };
     updateCalendarEvent.mutate({
       id: calendarEvent.id,
@@ -177,55 +186,66 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
             />
             <FormField
               control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <ImageUpload
+                      images={Array.isArray(field.value) ? field.value : []}
+                      onImagesChange={field.onChange}
+                      maxImages={10}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="repairType"
               render={({ field }) => (
                 <FormItem>
                   <div className="space-y-2">
-                    <div className="text-sm font-medium">修理の種類 (最大3つまで選択可能)</div>
-                    <div className="text-xs text-gray-500">
-                      選択済み: {selectedRepairTypes.length}/3
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm font-medium">修理の種類 (最大7つまで選択可能)</div>
+                      <Link to="/repairTypeManagement">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="text-xs h-7 px-2"
+                        >
+                          <SettingsIcon fontSize="small" className="mr-1" />
+                          管理
+                        </Button>
+                      </Link>
                     </div>
-                    <Select
-                      onValueChange={(value) => {
-                        if (!selectedRepairTypes.includes(value) && selectedRepairTypes.length < 3) {
+                    <div className="text-xs text-gray-500">
+                      選択済み: {selectedRepairTypes.length}/7
+                    </div>
+                    <select
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value && !selectedRepairTypes.includes(value) && selectedRepairTypes.length < 7) {
                           const newRepairTypes = [...selectedRepairTypes, value];
                           field.onChange(newRepairTypes);
+                          e.target.value = ''; // Reset select after selection
                         }
                       }}
-                      disabled={selectedRepairTypes.length >= 3}
+                      disabled={selectedRepairTypes.length >= 7 || repairTypeOptionsLoading}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="修理の種類を選択してください" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="max-h-64 overflow-y-auto">
-                        <SelectItem value="冷却不良">冷却不良</SelectItem>
-                        <SelectItem value="異音がする">異音がする</SelectItem>
-                        <SelectItem value="ベルト鳴き">ベルト鳴き</SelectItem>
-                        <SelectItem value="エンジン始動不良">エンジン始動不良</SelectItem>
-                        <SelectItem value="ユニット作動不良">ユニット作動不良</SelectItem>
-                        <SelectItem value="スタンバイ作動不良">スタンバイ作動不良</SelectItem>
-                        <SelectItem value="電源入らず">電源入らず</SelectItem>
-                        <SelectItem value="異臭・煙が出た">異臭・煙が出た</SelectItem>
-                        <SelectItem value="ファンモーター回らず">ファンモーター回らず</SelectItem>
-                        <SelectItem value="冷凍機　新規取付・載せ換え">冷凍機　新規取付・載せ換え</SelectItem>
-                        <SelectItem value="シーズンイン点検">シーズンイン点検</SelectItem>
-                        <SelectItem value="定期点検">定期点検</SelectItem>
-                        <SelectItem value="庫内洗浄">庫内洗浄</SelectItem>
-                        <SelectItem value="オイル交換">オイル交換</SelectItem>
-                        <SelectItem value="フェリー乗船前点検">フェリー乗船前点検</SelectItem>
-                        <SelectItem value="定置冷蔵庫　製作・修理・入替">定置冷蔵庫　製作・修理・入替</SelectItem>
-                        <SelectItem value="パーキングヒーター　取付・修理">パーキングヒーター　取付・修理</SelectItem>
-                        <SelectItem value="パーキングクーラー　取付・修理">パーキングクーラー　取付・修理</SelectItem>
-                        <SelectItem value="入庫">入庫</SelectItem>
-                        <SelectItem value="出張">出張</SelectItem>
-                        <SelectItem value="休日・時間外緊急対応">休日・時間外緊急対応</SelectItem>
-                        <SelectItem value="見積り・現調">見積り・現調</SelectItem>
-                        <SelectItem value="外注依頼">外注依頼</SelectItem>
-                        <SelectItem value="その他">その他</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      <option value="">
+                        {repairTypeOptionsLoading ? "読み込み中..." : "修理の種類を選択してください"}
+                      </option>
+                      {repairTypeOptions && repairTypeOptions.length > 0 && repairTypeOptions
+                        .filter(option => !selectedRepairTypes.includes(option.name))
+                        .map((option) => (
+                          <option key={option.id} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                    </select>
                     {selectedRepairTypes.length > 0 && (
                       <div className="space-y-2">
                         <div className="text-xs font-medium">選択された修理の種類:</div>
@@ -351,33 +371,30 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
                     {usersLoading ? (
                       <div className="text-sm text-gray-500">読み込み中...</div>
                     ) : (
-                      <Select
-                        onValueChange={(value) => {
-                          if (!selectedWorkers.includes(value) && selectedWorkers.length < 3) {
+                      <select
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value && !selectedWorkers.includes(value) && selectedWorkers.length < 3) {
                             const newWorkers = [...selectedWorkers, value];
                             field.onChange(newWorkers);
+                            e.target.value = ''; // Reset select after selection
                           }
                         }}
                         disabled={selectedWorkers.length >= 3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                       >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="作業員を選択してください" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="max-h-40 overflow-y-auto">
-                          {users?.map((user) => {
-                            const userName = user.user_profile?.name || user.email;
-                            if (!userName || selectedWorkers.includes(userName)) return null;
-                            
-                            return (
-                              <SelectItem key={user.id} value={userName}>
-                                {userName}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
+                        <option value="">作業員を選択してください</option>
+                        {users?.map((user) => {
+                          const userName = user.user_profile?.name || user.email;
+                          if (!userName || selectedWorkers.includes(userName)) return null;
+                          
+                          return (
+                            <option key={user.id} value={userName}>
+                              {userName}
+                            </option>
+                          );
+                        })}
+                      </select>
                     )}
                     {selectedWorkers.length > 0 && (
                       <div className="space-y-2">
@@ -641,6 +658,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
                 </FormItem>
               )}
             />
+            
 
             <div className="flex flex-col xs:flex-row justify-end items-center gap-3">
               <Button

@@ -20,6 +20,7 @@ export const createQuestion = async (values: WindQuestion) => {
     API_ROUTES.QUESTION.BASE,
     {
       content: values.content,
+      images: values.images || [],
     }
   );
   return data;
@@ -41,7 +42,10 @@ export const updateQuestion = async ({
 }) => {
   const { data } = await apiClient.put<WindQuestion>(
     `${API_ROUTES.QUESTION.BASE}/${id}`,
-    values
+    {
+      content: values.content,
+      images: values.images || [],
+    }
   );
   return data;
 };

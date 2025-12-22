@@ -15,6 +15,7 @@ import {
 import { useGetUser } from "../queries/AuthQuery";
 import AnswerDeleteAlertDialog from "./AnswerDeleteAlertDialog";
 import EditAnswerModal from "./EditAnswerModal";
+import ImageGallery from "./ImageGallery";
 dayjs.extend(relativeTime);
 dayjs.locale("ja");
 interface AnswerProps {
@@ -71,6 +72,9 @@ const Answer: React.FC<AnswerProps> = ({ answer }) => {
       </div>
       <div className="px-3 my-5">
         <h1 className="whitespace-pre-line break-all">{answer.content}</h1>
+        {answer.images && answer.images.length > 0 && (
+          <ImageGallery images={answer.images} />
+        )}
       </div>
       <div className="flex items-center justify-end space-x-3">
         <p className="text-gray-500 w-[50%]">

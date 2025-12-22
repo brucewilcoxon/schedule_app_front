@@ -29,9 +29,14 @@ import { useGetUsers } from "../queries/UserQuery";
 import { Checkbox } from "../@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../@/components/ui/radio-group";
 import { Label } from "../@/components/ui/label";
+import { useGetRepairTypeOptions } from "../queries/RepairTypeOptionQuery";
+import { Link } from "react-router-dom";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ImageUpload from "./ImageUpload";
 
 const CreateCalendarEvent: React.FC<CreateHeaderModalProps> = ({
   clickModalClose,
+  initialDate,
 }) => {
   const form = useForm({
     resolver: zodResolver(CalendarEventValidationShema),
@@ -43,14 +48,16 @@ const CreateCalendarEvent: React.FC<CreateHeaderModalProps> = ({
       workType: "",
       status: "",
       description: "",
-      start: "",
-      end: "",
+      start: initialDate || "",
+      end: initialDate || "",
       isDelayed: false,
+      images: [] as string[],
     },
   });
 
   const createEvent = useCreateCalendarEvent();
   const { data: users, isLoading: usersLoading } = useGetUsers();
+  const { data: repairTypeOptions = [], isLoading: repairTypeOptionsLoading } = useGetRepairTypeOptions();
 
   function onsubmit(values: any) {
     const formatValues = {
@@ -63,6 +70,7 @@ const CreateCalendarEvent: React.FC<CreateHeaderModalProps> = ({
       start: values.start,
       end: values.end ? values.end : values.start,
       is_delayed: values.isDelayed,
+      images: values.images || [],
     };
     createEvent.mutate(formatValues);
     clickModalClose();
@@ -91,53 +99,67 @@ const CreateCalendarEvent: React.FC<CreateHeaderModalProps> = ({
             </FormItem>
           )}
         />
+         <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <ImageUpload
+                  images={Array.isArray(field.value) ? field.value : []}
+                  onImagesChange={field.onChange}
+                  maxImages={10}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="repairType"
           render={({ field }) => (
             <FormItem>
               <div className="space-y-2">
-                <div className="text-sm font-medium">修理の種類 (最大3つまで選択可能)</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-medium">修理の種類 (最大7つまで選択可能)</div>
+                  <Link to="/repairTypeManagement">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="text-xs h-7 px-2"
+                    >
+                      <SettingsIcon fontSize="small" className="mr-1" />
+                      管理
+                    </Button>
+                  </Link>
+                </div>
                 <div className="text-xs text-gray-500">
-                  選択済み: {selectedRepairTypes.length}/3
+                  選択済み: {selectedRepairTypes.length}/7
                 </div>
                 <select
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value && !selectedRepairTypes.includes(value) && selectedRepairTypes.length < 3) {
+                    if (value && !selectedRepairTypes.includes(value) && selectedRepairTypes.length < 7) {
                       const newRepairTypes = [...selectedRepairTypes, value];
                       field.onChange(newRepairTypes);
                       e.target.value = ''; // Reset select after selection
                     }
                   }}
-                  disabled={selectedRepairTypes.length >= 3}
+                  disabled={selectedRepairTypes.length >= 7 || repairTypeOptionsLoading}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
-                  <option value="">修理の種類を選択してください</option>
-                  <option value="冷却不良">冷却不良</option>
-                  <option value="異音がする">異音がする</option>
-                  <option value="ベルト鳴き">ベルト鳴き</option>
-                  <option value="エンジン始動不良">エンジン始動不良</option>
-                  <option value="ユニット作動不良">ユニット作動不良</option>
-                  <option value="スタンバイ作動不良">スタンバイ作動不良</option>
-                  <option value="電源入らず">電源入らず</option>
-                  <option value="異臭・煙が出た">異臭・煙が出た</option>
-                  <option value="ファンモーター回らず">ファンモーター回らず</option>
-                  <option value="冷凍機　新規取付・載せ換え">冷凍機　新規取付・載せ換え</option>
-                  <option value="シーズンイン点検">シーズンイン点検</option>
-                  <option value="定期点検">定期点検</option>
-                  <option value="庫内洗浄">庫内洗浄</option>
-                  <option value="オイル交換">オイル交換</option>
-                  <option value="フェリー乗船前点検">フェリー乗船前点検</option>
-                  <option value="定置冷蔵庫　製作・修理・入替">定置冷蔵庫　製作・修理・入替</option>
-                  <option value="パーキングヒーター　取付・修理">パーキングヒーター　取付・修理</option>
-                  <option value="パーキングクーラー　取付・修理">パーキングクーラー　取付・修理</option>
-                  <option value="入庫">入庫</option>
-                  <option value="出張">出張</option>
-                  <option value="休日・時間外緊急対応">休日・時間外緊急対応</option>
-                  <option value="見積り・現調">見積り・現調</option>
-                  <option value="外注依頼">外注依頼</option>
-                  <option value="その他">その他</option>
+                  <option value="">
+                    {repairTypeOptionsLoading ? "読み込み中..." : "修理の種類を選択してください"}
+                  </option>
+                  {repairTypeOptions && repairTypeOptions.length > 0 && repairTypeOptions
+                    .filter(option => !selectedRepairTypes.includes(option.name))
+                    .map((option) => (
+                      <option key={option.id} value={option.name}>
+                        {option.name}
+                      </option>
+                    ))}
                 </select>
                 {selectedRepairTypes.length > 0 && (
                   <div className="space-y-2">
@@ -474,6 +496,7 @@ const CreateCalendarEvent: React.FC<CreateHeaderModalProps> = ({
             </FormItem>
           )}
         />
+       
         <div className="flex flex-col sm:flex-row justify-end items-center gap-3">
           <Button
             type="submit"

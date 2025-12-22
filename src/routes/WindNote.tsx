@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import { useGetUser } from "../queries/AuthQuery";
 import RequireAuth from "../components/RequireAuth";
 import Layout from "../components/Layout";
+import ImageGallery from "../components/ImageGallery";
 
 const WindNote = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -65,9 +66,12 @@ const WindNote = () => {
         <HeaderTab />
         <div className=" p-2 mb-[100px]">
           <div className="flex p-2 items-start justify-between">
-            <div>
+            <div className="flex-1">
               <h1 className="font-bold text-lg">{note.title}</h1>
               <p className="whitespace-pre-line break-all">{note.content}</p>
+              {note.images && note.images.length > 0 && (
+                <ImageGallery images={note.images} />
+              )}
             </div>
             {(user?.id === note.user.id || user?.role === 'manager') && (
               <DropdownMenu>
