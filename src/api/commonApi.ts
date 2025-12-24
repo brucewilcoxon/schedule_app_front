@@ -1,6 +1,12 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
+// Normalize API base URL - remove trailing slash to prevent double slashes
+const getApiBaseUrl = () => {
+  const url = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
+  return url.replace(/\/+$/, ''); // Remove trailing slashes
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

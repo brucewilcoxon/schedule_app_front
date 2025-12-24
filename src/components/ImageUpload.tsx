@@ -3,6 +3,7 @@ import { Button } from "../@/components/ui/button";
 import ImageIcon from "@mui/icons-material/Image";
 import UploadIcon from "@mui/icons-material/Upload";
 import CloseIcon from "@mui/icons-material/Close";
+import { apiClient } from "../api/commonApi";
 
 interface ImageUploadProps {
   images: string[];
@@ -50,23 +51,33 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     const formData = new FormData();
     formData.append("image", file);
 
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
-    const token = localStorage.getItem("auth_token");
+    try {
+      const response = await apiClient.post("/api/upload-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Accept": "application/json",
+        },
+      });
 
-    const response = await fetch(`${API_BASE_URL}/api/upload-image`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error("Upload failed");
+      if (response.data && response.data.file_path) {
+        return response.data.file_path;
+      }
+      
+      throw new Error("Upload failed: Invalid response");
+    } catch (error: any) {
+      console.error("Image upload error:", error);
+      if (error.response) {
+        // Server responded with error status
+        const errorMessage = error.response.data?.message || error.response.data?.error || "Upload failed";
+        throw new Error(errorMessage);
+      } else if (error.request) {
+        // Request was made but no response received
+        throw new Error("Upload failed: No response from server");
+      } else {
+        // Error in request setup
+        throw new Error(error.message || "Upload failed");
+      }
     }
-
-    const data = await response.json();
-    return data.file_path;
   };
 
   const removeImage = (index: number) => {
@@ -122,9 +133,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           {images.map((imagePath, index) => {
             // Remove leading slash if present to avoid double slashes
             const cleanPath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+            // Normalize base URL - remove trailing slash
+            const baseUrl = (process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000").replace(/\/+$/, '');
             const imageUrl = imagePath.startsWith("http")
               ? imagePath
-              : `${process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000"}/${cleanPath}`;
+              : `${baseUrl}/${cleanPath}`;
 
             return (
               <div key={index} className="relative group">
