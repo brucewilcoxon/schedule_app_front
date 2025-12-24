@@ -127,3 +127,15 @@ li {
 #footer.active {
   color: #e81a48 !important;
 }
+
+select option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  border-radius: 5px !important;
+  padding: 5px !important;
+  margin: 5px !important;
+  font-size: 20px !important;
+  line-height: 30px !important; 
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.1) !important;
+}
