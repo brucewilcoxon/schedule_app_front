@@ -17,13 +17,6 @@ import {
   DialogTitle,
 } from "../@/components/ui/dialog";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../@/components/ui/select";
-import {
   Form,
   FormControl,
   FormField,
@@ -464,84 +457,18 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
               name="status"
               render={({ field }) => (
                 <FormItem className="w-[100%]">
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="未開始">
-                          {field.value && (
-                            <div className="flex items-center gap-3">
-                              <div className={`w-4 h-4 rounded-full border-2 ${
-                                field.value === "未開始" ? "bg-gray-500 border-gray-300" :
-                                field.value === "作業中" ? "bg-blue-500 border-blue-300" :
-                                field.value === "見積り保留中" ? "bg-yellow-500 border-yellow-300" :
-                                field.value === "部品待ち保留中" ? "bg-orange-500 border-orange-300" :
-                                field.value === "完了" ? "bg-green-500 border-green-300" :
-                                field.value === "連絡済み" ? "bg-purple-500 border-purple-300" :
-                                "bg-gray-500 border-gray-300"
-                              }`}></div>
-                              <span className="font-medium">{field.value}</span>
-                            </div>
-                          )}
-                        </SelectValue>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem 
-                        value="未開始"
-                        className="text-gray-800 hover:bg-gray-200 focus:bg-gray-200 data-[state=checked]:bg-gray-200"
-                      >
-                        <div className="flex items-center gap-3 w-full">
-                          <div className="w-4 h-4 rounded-full bg-gray-500 border-2 border-gray-300"></div>
-                          <span className="font-medium">未開始</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem 
-                        value="作業中"
-                        className="text-blue-800 hover:bg-blue-200 focus:bg-blue-200 data-[state=checked]:bg-blue-200"
-                      >
-                        <div className="flex items-center gap-3 w-full">
-                          <div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-blue-300"></div>
-                          <span className="font-medium">作業中</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem 
-                        value="見積り保留中"
-                        className="text-yellow-800 hover:bg-yellow-200 focus:bg-yellow-200 data-[state=checked]:bg-yellow-200"
-                      >
-                        <div className="flex items-center gap-3 w-full">
-                          <div className="w-4 h-4 rounded-full bg-yellow-500 border-2 border-yellow-300"></div>
-                          <span className="font-medium">見積り保留中</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem 
-                        value="部品待ち保留中"
-                        className="text-orange-800 hover:bg-orange-200 focus:bg-orange-200 data-[state=checked]:bg-orange-200"
-                      >
-                        <div className="flex items-center gap-3 w-full">
-                          <div className="w-4 h-4 rounded-full bg-orange-500 border-2 border-orange-300"></div>
-                          <span className="font-medium">部品待ち保留中</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem 
-                        value="完了"
-                        className="text-green-800 hover:bg-green-200 focus:bg-green-200 data-[state=checked]:bg-green-200"
-                      >
-                        <div className="flex items-center gap-3 w-full">
-                          <div className="w-4 h-4 rounded-full bg-green-500 border-2 border-green-300"></div>
-                          <span className="font-medium">完了</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem 
-                        value="連絡済み"
-                        className="text-purple-800 hover:bg-purple-200 focus:bg-purple-200 data-[state=checked]:bg-purple-200"
-                      >
-                        <div className="flex items-center gap-3 w-full">
-                          <div className="w-4 h-4 rounded-full bg-purple-500 border-2 border-purple-300"></div>
-                          <span className="font-medium">連絡済み</span>
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <select 
+                    onChange={(e) => field.onChange(e.target.value)} 
+                    value={field.value}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="未開始">未開始</option>
+                    <option value="作業中">作業中</option>
+                    <option value="見積り保留中">見積り保留中</option>
+                    <option value="部品待ち保留中">部品待ち保留中</option>
+                    <option value="完了">完了</option>
+                    <option value="連絡済み">連絡済み</option>
+                  </select>
                   <FormMessage />
                 </FormItem>
               )}
