@@ -1,13 +1,50 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as api from "../api/userApi";
 import { toast } from "react-toastify";
+import { useGetUser } from "./AuthQuery";
 
 export const useGetSeniorUsers = () => {
-  return useQuery("users", () => api.getSeniorUsers());
+  const { data: user, isLoading: userLoading } = useGetUser();
+  const isManager = user?.role === "manager";
+  
+  return useQuery("users", () => api.getSeniorUsers(), {
+    enabled: !userLoading && isManager,
+    retry: (failureCount, error: any) => {
+      // Don't retry on 403 (Forbidden) errors
+      if (error?.response?.status === 403) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+    onError: (error: any) => {
+      // Only show error if it's not a 403 (permission issue)
+      if (error?.response?.status !== 403) {
+        console.error("Error fetching senior users:", error);
+      }
+    },
+  });
 };
 
 export const useGetUsers = () => {
-  return useQuery("allUsers", () => api.getUsers());
+  const { data: user, isLoading: userLoading } = useGetUser();
+  const isManager = user?.role === "manager";
+  
+  return useQuery("allUsers", () => api.getUsers(), {
+    enabled: !userLoading && isManager,
+    retry: (failureCount, error: any) => {
+      // Don't retry on 403 (Forbidden) errors
+      if (error?.response?.status === 403) {
+        return false;
+      }
+      return failureCount < 3;
+    },
+    onError: (error: any) => {
+      // Only show error if it's not a 403 (permission issue)
+      if (error?.response?.status !== 403) {
+        console.error("Error fetching users:", error);
+      }
+    },
+  });
 };
 
 export const useCreateUser = () => {
