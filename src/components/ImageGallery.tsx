@@ -31,7 +31,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, className = "" }) =
           return (
             <div
               key={index}
-              className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-100 cursor-pointer hover:opacity-90 transition-opacity"
+              className="relative rounded-lg overflow-hidden border border-gray-200 bg-gray-100 cursor-pointer hover:opacity-90 transition-opacity"
               onClick={() => setSelectedImage(imageUrl)}
             >
               <img

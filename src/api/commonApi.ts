@@ -1,16 +1,11 @@
 import axios from "axios";
 
-// Normalize API base URL - remove trailing slash to prevent double slashes
-const getApiBaseUrl = () => {
-  const url = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
-  return url.replace(/\/+$/, ''); // Remove trailing slashes
-};
-
-const API_BASE_URL = getApiBaseUrl();
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
+  timeout: 300000, // 5 minutes timeout for long operations like file uploads
 });
 
 // Function to set the authorization token
@@ -41,10 +36,17 @@ export const uploadProfileImage = async (file: File) => {
         'Content-Type': 'multipart/form-data',
         'Accept': 'application/json',
       },
+      timeout: 300000, // 5 minutes timeout for file uploads
     });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Image upload error:', error);
+    
+    // Handle timeout errors specifically
+    if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+      throw new Error('アップロードがタイムアウトしました。ファイルサイズが大きすぎるか、ネットワーク接続に問題がある可能性があります。');
+    }
+    
     throw error;
   }
 };

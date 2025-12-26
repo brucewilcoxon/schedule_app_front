@@ -17,6 +17,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   maxImages = 10,
 }) => {
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,25 +30,57 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       return;
     }
 
-    const filesToUpload = Array.from(files).slice(0, remainingSlots);
+    // Check file sizes before uploading (5MB = 5 * 1024 * 1024 bytes)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    const filesArray = Array.from(files).slice(0, remainingSlots);
+    
+    // Validate file sizes
+    const oversizedFiles = filesArray.filter(file => file.size > MAX_FILE_SIZE);
+    if (oversizedFiles.length > 0) {
+      const fileNames = oversizedFiles.map(f => f.name).join(', ');
+      alert(`ファイルサイズが大きすぎます。5MB以下の画像をアップロードしてください。\n\n大きすぎるファイル: ${fileNames}`);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    const filesToUpload = filesArray;
     setUploading(true);
+    setUploadProgress({});
 
     try {
-      const uploadPromises = filesToUpload.map((file) => uploadImage(file));
+      const uploadPromises = filesToUpload.map((file) => {
+        const fileId = `${file.name}-${file.size}`;
+        return uploadImage(file, (progress) => {
+          setUploadProgress(prev => ({ ...prev, [fileId]: progress }));
+        });
+      });
       const uploadedPaths = await Promise.all(uploadPromises);
       onImagesChange([...images, ...uploadedPaths]);
-    } catch (error) {
+      setUploadProgress({});
+    } catch (error: any) {
       console.error("Image upload error:", error);
-      alert("画像のアップロードに失敗しました");
+      const errorMessage = error.message || "画像のアップロードに失敗しました";
+      
+      // Provide specific error messages
+      if (errorMessage.includes("タイムアウト") || errorMessage.includes("timeout")) {
+        alert("アップロードがタイムアウトしました。\n\nファイルサイズが大きすぎるか、ネットワーク接続に問題がある可能性があります。\n\nより小さなファイルサイズでお試しください。");
+      } else if (errorMessage.includes("大きすぎ")) {
+        alert(errorMessage);
+      } else {
+        alert(errorMessage);
+      }
     } finally {
       setUploading(false);
+      setUploadProgress({});
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     }
   };
 
-  const uploadImage = async (file: File): Promise<string> => {
+  const uploadImage = async (file: File, onProgress?: (progress: number) => void): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
 
@@ -56,6 +89,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         headers: {
           "Content-Type": "multipart/form-data",
           "Accept": "application/json",
+        },
+        timeout: 300000, // 5 minutes timeout for file uploads
+        onUploadProgress: (progressEvent) => {
+          if (onProgress && progressEvent.total) {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            onProgress(percentCompleted);
+          }
         },
       });
 
@@ -66,16 +106,22 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       throw new Error("Upload failed: Invalid response");
     } catch (error: any) {
       console.error("Image upload error:", error);
+      
+      // Handle timeout errors
+      if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+        throw new Error("アップロードがタイムアウトしました。ファイルサイズが大きすぎるか、ネットワーク接続に問題がある可能性があります。");
+      }
+      
       if (error.response) {
         // Server responded with error status
-        const errorMessage = error.response.data?.message || error.response.data?.error || "Upload failed";
+        const errorMessage = error.response.data?.message || error.response.data?.error || "アップロードに失敗しました";
         throw new Error(errorMessage);
       } else if (error.request) {
         // Request was made but no response received
-        throw new Error("Upload failed: No response from server");
+        throw new Error("サーバーからの応答がありません。ネットワーク接続を確認してください。");
       } else {
         // Error in request setup
-        throw new Error(error.message || "Upload failed");
+        throw new Error(error.message || "アップロードに失敗しました");
       }
     }
   };
@@ -117,6 +163,24 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             )}
           </Button>
         )}
+      {uploading && Object.keys(uploadProgress).length > 0 && (
+        <div className="text-xs text-gray-600 mt-1">
+          {Object.entries(uploadProgress).map(([fileId, progress]) => (
+            <div key={fileId} className="mb-1">
+              <div className="flex justify-between mb-1">
+                <span>アップロード中...</span>
+                <span>{progress}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div
+                  className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       </div>
 
       <input
@@ -141,7 +205,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
             return (
               <div key={index} className="relative group">
-                <div className="aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                <div className="rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
                   <img
                     src={imageUrl}
                     alt={`Upload ${index + 1}`}
