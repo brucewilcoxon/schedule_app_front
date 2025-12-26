@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoginCredentials } from "../types/user";
 import { AxiosError } from "axios";
-import { clearAllAuthData } from "../utils/cookieUtils";
 
 export const useGetUser = () => {
   return useQuery("user", () => api.getUser(), {
@@ -78,9 +77,25 @@ export const useLogout = () => {
       queryClient.invalidateQueries("user");
       
       // Force clear any remaining cookies that might have been missed
-      // (This is a backup in case the API logout didn't catch everything)
-      clearAllAuthData();
+      const forceClearCookies = () => {
+        const cookieNames = [
+          'XSRF-TOKEN',
+          'laravel_session',
+          'windap_session',
+          'remember_web',
+          'remember_token',
+          'session',
+          'auth'
+        ];
+        
+        cookieNames.forEach(name => {
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/api`;
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/sanctum`;
+        });
+      };
       
+      forceClearCookies();
       toast.success("ログアウトしました");
       
       // Navigate to login page after a short delay to ensure cleanup is complete
