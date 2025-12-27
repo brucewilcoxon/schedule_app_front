@@ -31,8 +31,6 @@ import RefrigerantWorkplace from "./routes/RefrigerantWorkplace";
 import RefrigerantDocument from "./routes/RefrigerantDocument";
 import GasManagement from "./components/GasManagement";
 import RepairTypeOptionManagement from "./components/RepairTypeOptionManagement";
-import { setAuthToken } from "./api/commonApi";
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -46,11 +44,6 @@ const queryClient = new QueryClient({
       retry: false,
     },
   },
-});
-
-// Clear auth_token when browser tab/window is closed
-window.addEventListener("beforeunload", () => {
-  setAuthToken(null);
 });
 
 root.render(
