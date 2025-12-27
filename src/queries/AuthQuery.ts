@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import * as api from "../api/authApi";
+import { setAuthToken } from "../api/commonApi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoginCredentials } from "../types/user";
@@ -8,10 +9,28 @@ import { AxiosError } from "axios";
 
 export const useGetUser = () => {
   return useQuery("user", () => api.getUser(), {
-    onError: (error) => {
+    retry: (failureCount, error: any) => {
+      // Don't retry on 401 (Unauthorized) or 500 errors
+      if (error?.response?.status === 401 || error?.response?.status === 500) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+    onError: (error: AxiosError) => {
       console.error("Error fetching user:", error);
+      
+      // Handle specific error cases
+      if (error?.response?.status === 401) {
+        // Unauthorized - clear token and redirect to login
+        localStorage.removeItem('auth_token');
+        setAuthToken(null);
+      } else if (error?.response?.status === 500) {
+        // Server error - log for debugging
+        console.error("Server error details:", error.response?.data);
+      }
     },
     onSuccess: (data) => {
+      // User data fetched successfully
     },
   });
 };

@@ -1,12 +1,78 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
+// Normalize API base URL to handle various input formats
+const normalizeApiBaseUrl = (url: string | undefined): string => {
+  if (!url) {
+    return 'http://127.0.0.1:8000';
+  }
+  
+  // Remove any trailing slashes, colons, or whitespace
+  let normalized = url.trim().replace(/[/:]+$/, '');
+  
+  // If it doesn't start with http:// or https://, add http://
+  if (!normalized.match(/^https?:\/\//)) {
+    // If it starts with a protocol-like pattern, keep it, otherwise add http://
+    if (!normalized.includes('://')) {
+      normalized = `http://${normalized}`;
+    }
+  }
+  
+  // Remove any trailing path segments that might cause issues
+  normalized = normalized.split('/').slice(0, 3).join('/');
+  
+  return normalized;
+};
+
+const API_BASE_URL = normalizeApiBaseUrl(process.env.REACT_APP_API_BASE_URL);
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
   timeout: 300000, // 5 minutes timeout for long operations like file uploads
 });
+
+// Add request interceptor to validate and log URLs
+apiClient.interceptors.request.use(
+  (config) => {
+    // Ensure the URL is properly constructed
+    if (config.url) {
+      // If the URL doesn't start with /, it might be malformed
+      if (!config.url.startsWith('/')) {
+        console.warn('API URL does not start with /:', config.url);
+      }
+      
+      // Log the full URL for debugging (only in development)
+      if (process.env.NODE_ENV === 'development') {
+        const fullUrl = config.baseURL + config.url;
+        console.log('API Request:', config.method?.toUpperCase(), fullUrl);
+      }
+    }
+    return config;
+  },
+  (error) => {
+    console.error('Request interceptor error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor to handle errors better
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Log detailed error information
+    if (error.config) {
+      const fullUrl = error.config.baseURL + error.config.url;
+      console.error('API Error:', {
+        method: error.config.method?.toUpperCase(),
+        url: fullUrl,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+      });
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Function to set the authorization token
 export const setAuthToken = (token: string | null) => {
