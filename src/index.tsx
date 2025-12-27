@@ -48,9 +48,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// Setup logout handler for tab close
-setupLogoutOnClose();
-
 root.render(
   <QueryClientProvider client={queryClient}>
     <Meta />
@@ -86,3 +83,6 @@ root.render(
     </BrowserRouter>
   </QueryClientProvider>
 );
+
+// Setup logout handler for browser tab/window close
+setupLogoutOnClose();
