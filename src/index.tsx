@@ -31,6 +31,8 @@ import RefrigerantWorkplace from "./routes/RefrigerantWorkplace";
 import RefrigerantDocument from "./routes/RefrigerantDocument";
 import GasManagement from "./components/GasManagement";
 import RepairTypeOptionManagement from "./components/RepairTypeOptionManagement";
+import { setupLogoutOnClose } from "./utils/logoutOnClose";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -45,6 +47,9 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Setup logout handler for tab close
+setupLogoutOnClose();
 
 root.render(
   <QueryClientProvider client={queryClient}>
