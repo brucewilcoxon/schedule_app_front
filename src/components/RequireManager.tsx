@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useEffect } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { Navigate } from "react-router-dom";
-import { useGetUser } from "../queries/AuthQuery";
+import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 
 // Prevent duplicate manager-permission toasts across multiple mounts
@@ -11,8 +11,12 @@ type RequireManagerProps = {
   children?: ReactNode;
 };
 
+/**
+ * RequireManager component protects routes that require manager role.
+ * Uses AuthContext as the single source of truth.
+ */
 export const RequireManager: FC<RequireManagerProps> = ({ children }) => {
-  const { data: user, isLoading } = useGetUser();
+  const { user, isLoading, isAuthenticated } = useAuth();
 
   const role = user?.role;
   const isNotManager = role !== undefined && role !== "manager";
@@ -26,15 +30,25 @@ export const RequireManager: FC<RequireManagerProps> = ({ children }) => {
   }, [isLoading, user, isNotManager]);
 
   if (isLoading) {
-    return <TailSpin height="80" width="80" color="#00aab9" />;
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        width: '100vw'
+      }}>
+        <TailSpin height="80" width="80" color="#00aab9" />
+      </div>
+    );
   }
 
-  if (!user) {
-    return <Navigate to="/login" />;
+  if (!isAuthenticated || !user) {
+    return <Navigate to="/login" replace />;
   }
 
   if (isNotManager) {
-    return <Navigate to="/calendar" />;
+    return <Navigate to="/calendar" replace />;
   }
 
   return <>{children}</>;

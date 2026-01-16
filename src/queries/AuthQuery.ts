@@ -5,25 +5,46 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoginCredentials } from "../types/user";
 import { AxiosError } from "axios";
-import { performLogoutCleanup, forceClearCookies } from "../utils/logoutUtils";
+import { useAuth } from "../contexts/AuthContext";
 
+/**
+ * useGetUser hook - DEPRECATED: Use useAuth() from AuthContext instead.
+ * This hook is kept for backward compatibility but now uses AuthContext.
+ * 
+ * For new code, use: const { user, isLoading, isAuthenticated } = useAuth();
+ */
 export const useGetUser = () => {
-  return useQuery("user", () => api.getUser(), {
-    onError: (error) => {
-      console.error("Error fetching user:", error);
-    },
-    onSuccess: (data) => {
-    },
-  });
+  const { user, isLoading } = useAuth();
+  
+  // Return a query-like interface for backward compatibility
+  return {
+    data: user,
+    isLoading,
+    error: null,
+    refetch: async () => {
+      // If needed, we can refetch from API and update context
+      // But typically AuthContext is the source of truth
+      try {
+        const freshUser = await api.getUser();
+        // This would need to be handled by AuthContext
+        return { data: freshUser };
+      } catch (error) {
+        throw error;
+      }
+    }
+  };
 };
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
+  const { setUser } = useAuth();
+  
   return useMutation(api.login, {
     onSuccess: (data) => {
-      // Store the user data in the cache
+      // Store the user data in the cache and context
       if (data.user) {
         queryClient.setQueryData("user", data.user);
+        setUser(data.user); // Update AuthContext
       }
       queryClient.invalidateQueries("user");
       toast.success("ログインしました");
@@ -41,6 +62,7 @@ export const useSignUp = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const loginMutation = useLogin();
+  const { setUser } = useAuth();
 
   return useMutation(api.signUp, {
     onSuccess: async (user, variables: LoginCredentials) => {
@@ -49,9 +71,10 @@ export const useSignUp = () => {
         password: variables.password,
       });
       
-      // Store the user data in the cache
+      // Store the user data in the cache and context
       if (loginResponse.user) {
         queryClient.setQueryData("user", loginResponse.user);
+        setUser(loginResponse.user); // Update AuthContext
       }
       
       queryClient.invalidateQueries("user");
@@ -69,23 +92,27 @@ export const useSignUp = () => {
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { clearAuth } = useAuth();
   
   return useMutation(api.logout, {
     onSuccess: () => {
-      // Perform logout cleanup with queryClient
-      performLogoutCleanup(queryClient);
+      // Clear AuthContext (this also clears localStorage and cookies)
+      clearAuth();
       
-      // Force clear any remaining cookies that might have been missed
-      forceClearCookies();
+      // Clear all React Query cache
+      queryClient.clear();
+      queryClient.invalidateQueries("user");
       
       toast.success("ログアウトしました");
       
-      // Navigate to login page after a short delay to ensure cleanup is complete
-      setTimeout(() => {
-        navigate("/login");
-      }, 100);
+      // Navigate to login page
+      navigate("/login", { replace: true });
     },
     onError: () => {
+      // Even on error, clear local state
+      clearAuth();
+      queryClient.clear();
+      navigate("/login", { replace: true });
       toast.error("ログアウトに失敗しました");
     },
   });

@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import SignUp from "./routes/SignUp";
 import Login from "./routes/Login";
 import WindNoteList from "./routes/WindNoteList";
@@ -31,6 +31,10 @@ import RefrigerantWorkplace from "./routes/RefrigerantWorkplace";
 import RefrigerantDocument from "./routes/RefrigerantDocument";
 import GasManagement from "./components/GasManagement";
 import RepairTypeOptionManagement from "./components/RepairTypeOptionManagement";
+import { AuthProviderWrapper } from "./components/AuthProviderWrapper";
+import RequireAuth from "./components/RequireAuth";
+import RequireManager from "./components/RequireManager";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -48,36 +52,38 @@ const queryClient = new QueryClient({
 
 root.render(
   <QueryClientProvider client={queryClient}>
-    <Meta />
     <BrowserRouter>
-      <ToastContainer hideProgressBar={true} />
-      <Routes>
-        <Route index element={<App />} />
-        <Route path="/signUp" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/windNote" element={<WindNoteList />} />
-        <Route path="/windNote/:id" element={<WindNote />} />
-        <Route path="/calendar" element={<WindCalendar />} />
-        <Route path="/myPage" element={<MyPage />}>
-          <Route path="intra" element={<IntraList />} />
-          <Route path="note" element={<MyPageNoteList />} />
-          <Route path="question" element={<MyPageQuestionList />} />
-          <Route path="answer" element={<MyPageAnswerList />} />
-        </Route>
-        <Route path="/myPage/profile" element={<MyPageProfile />} />
-        <Route path="/userManagement" element={<UserManagement />} />
-        <Route path="/question" element={<QuestionList />} />
-        <Route path="/timeline" element={<NoteTimeline />} />
-        <Route path="/question/:id/answer" element={<Answer />} />
-        <Route path="/refrigerant" element={<Refrigerant />}>
-          <Route index element={<RefrigerantHome />} />
-          <Route path="company" element={<RefrigerantCompany />} />
-          <Route path="workplace" element={<RefrigerantWorkplace />} />
-          <Route path="document" element={<RefrigerantDocument />} />
-        </Route>
-        <Route path="/gasManagement" element={<GasManagement />} />
-        <Route path="/repairTypeManagement" element={<RepairTypeOptionManagement />} />
-      </Routes>
+      <AuthProviderWrapper>
+        <Meta />
+        <ToastContainer hideProgressBar={true} />
+        <Routes>
+          <Route index element={<Navigate to="/calendar" replace />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/windNote" element={<RequireAuth><WindNoteList /></RequireAuth>} />
+          <Route path="/windNote/:id" element={<RequireAuth><WindNote /></RequireAuth>} />
+          <Route path="/calendar" element={<RequireAuth><WindCalendar /></RequireAuth>} />
+          <Route path="/myPage" element={<RequireAuth><MyPage /></RequireAuth>}>
+            <Route path="intra" element={<IntraList />} />
+            <Route path="note" element={<MyPageNoteList />} />
+            <Route path="question" element={<MyPageQuestionList />} />
+            <Route path="answer" element={<MyPageAnswerList />} />
+          </Route>
+          <Route path="/myPage/profile" element={<RequireAuth><MyPageProfile /></RequireAuth>} />
+          <Route path="/userManagement" element={<RequireManager><UserManagement /></RequireManager>} />
+          <Route path="/question" element={<RequireAuth><QuestionList /></RequireAuth>} />
+          <Route path="/timeline" element={<RequireAuth><NoteTimeline /></RequireAuth>} />
+          <Route path="/question/:id/answer" element={<RequireAuth><Answer /></RequireAuth>} />
+          <Route path="/refrigerant" element={<RequireAuth><Refrigerant /></RequireAuth>}>
+            <Route index element={<RefrigerantHome />} />
+            <Route path="company" element={<RefrigerantCompany />} />
+            <Route path="workplace" element={<RefrigerantWorkplace />} />
+            <Route path="document" element={<RefrigerantDocument />} />
+          </Route>
+          <Route path="/gasManagement" element={<RequireAuth><GasManagement /></RequireAuth>} />
+          <Route path="/repairTypeManagement" element={<RequireManager><RepairTypeOptionManagement /></RequireManager>} />
+        </Routes>
+      </AuthProviderWrapper>
     </BrowserRouter>
   </QueryClientProvider>
 );

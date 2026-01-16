@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000';
 
@@ -19,7 +19,92 @@ export const setAuthToken = (token: string | null) => {
   }
 };
 
-// Initialize token from localStorage if available
+// Function to clear all authentication state
+export const clearAuthState = () => {
+  setAuthToken(null);
+  
+  // Clear all cookies
+  const cookies = document.cookie.split(";");
+  cookies.forEach(cookie => {
+    const eqPos = cookie.indexOf("=");
+    const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+    const paths = ['/', '/api', '/sanctum'];
+    const domains = ['', window.location.hostname, '.' + window.location.hostname];
+    
+    paths.forEach(path => {
+      domains.forEach(domain => {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}${domain ? `; domain=${domain}` : ''}`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}${domain ? `; domain=${domain}` : ''}; secure`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}${domain ? `; domain=${domain}` : ''}; secure; samesite=strict`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=${path}${domain ? `; domain=${domain}` : ''}; secure; samesite=lax`;
+      });
+    });
+  });
+  
+  // Clear sessionStorage
+  sessionStorage.clear();
+};
+
+// Store reference to auth state setter (will be set by AuthProvider)
+let authStateSetter: ((user: any) => void) | null = null;
+let authClearer: (() => void) | null = null;
+let authNavigator: ((path: string) => void) | null = null;
+
+export const setAuthStateCallbacks = (
+  setUser: (user: any) => void,
+  clearAuth: () => void,
+  navigate: (path: string) => void
+) => {
+  authStateSetter = setUser;
+  authClearer = clearAuth;
+  authNavigator = navigate;
+};
+
+// Request interceptor: Add token to requests if available
+apiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    // Token is already set via setAuthToken, but ensure it's always fresh
+    const token = localStorage.getItem('auth_token');
+    if (token && !config.headers['Authorization']) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor: Handle 401 Unauthorized globally
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error: AxiosError) => {
+    // Handle 401 Unauthorized - token expired or invalid
+    if (error.response?.status === 401) {
+      // Clear all auth state
+      clearAuthState();
+      
+      // Clear auth context if callbacks are set
+      if (authClearer) {
+        authClearer();
+      }
+      
+      // Redirect to login if not already there
+      const currentPath = window.location.pathname;
+      const publicRoutes = ['/login', '/signUp'];
+      if (!publicRoutes.includes(currentPath) && authNavigator) {
+        authNavigator('/login');
+      }
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+// Initialize token from localStorage if available (for initial requests)
+// But note: AuthInitializer will verify this token before rendering
 const token = localStorage.getItem('auth_token');
 if (token) {
   apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -74,7 +159,7 @@ export const API_ROUTES = {
     BASE: "/api/answer",
   },
   CALENDAR: {
-    LIST: "/api/calendars",
+    LIST: "/api/calendar",
     CREATE: "/api/calendar",
     BASE: "/api/calendar",
   },
