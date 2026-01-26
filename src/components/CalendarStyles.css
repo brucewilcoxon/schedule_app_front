@@ -197,4 +197,57 @@
 
 .calendar-container .fc-daygrid-day-events {
   margin-top: 4px !important;
+}
+
+/* Scrolling text for long event titles */
+.calendar-container .fc-event-title-wrapper {
+  overflow: hidden !important;
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+}
+
+.calendar-container .fc-event-title-scroll {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  animation: scroll-text-slow 35s linear infinite !important;
+  animation-play-state: running !important;
+  will-change: transform !important;
+}
+
+/* Pause animation on hover for better readability */
+.calendar-container .fc-event:hover .fc-event-title-scroll {
+  animation-play-state: paused !important;
+}
+
+/* Slow scrolling marquee animation */
+/* The text will scroll smoothly when it's longer than the container */
+@keyframes scroll-text-slow {
+  0%, 20% {
+    transform: translateX(0) !important;
+  }
+  40%, 60% {
+    /* Scroll left by a large amount - will only show movement when text overflows container */
+    /* Using a large negative value that will be visible when content width > container width */
+    transform: translateX(-200px) !important;
+  }
+  80%, 100% {
+    transform: translateX(0) !important;
+  }
+}
+
+/* Ensure text doesn't break and maintains inline display */
+.calendar-container .fc-event-title-text,
+.calendar-container .fc-event-time-period {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+
+/* Make the scroll container allow content to determine its width naturally */
+.calendar-container .fc-event-title-scroll {
+  /* Content will make this wider than wrapper when text is long */
+  width: auto !important;
+  min-width: 100% !important;
 } 

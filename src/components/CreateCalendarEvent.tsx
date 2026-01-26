@@ -77,7 +77,7 @@ const CreateCalendarEvent: React.FC<CreateHeaderModalProps> = ({
       description: values.description,
       start: values.start,
       end: values.end ? values.end : values.start,
-      time_period: values.timePeriod || null,
+      time_period: values.timePeriod && values.timePeriod.trim() !== "" ? values.timePeriod : null,
       is_delayed: values.isDelayed,
       images: values.images || [],
     };

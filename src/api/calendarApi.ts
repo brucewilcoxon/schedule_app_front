@@ -20,6 +20,7 @@ export const createCalendarEvent = async (values: CalendarWithoutId) => {
       description: values.description,
       start: values.start,
       end: values.end,
+      time_period: values.time_period,
       is_delayed: values.is_delayed,
       images: values.images || [],
     }
@@ -45,6 +46,7 @@ export const updateCalendarEvent = async ({
       description: values.description,
       start: values.start,
       end: values.end,
+      time_period: values.time_period,
       is_delayed: values.is_delayed,
       images: values.images || [],
     }

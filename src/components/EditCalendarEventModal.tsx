@@ -59,33 +59,20 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
   const { data: user } = useGetUser();
   const { data: repairTypeOptions = [], isLoading: repairTypeOptionsLoading } = useGetRepairTypeOptions();
 
-  // Parse existing content to extract fields
-  const existingFields = {
-    workers: calendarEvent.workers || [],
-    vehicleInfo: calendarEvent.vehicle_info || "",
-    repairType: Array.isArray(calendarEvent.repair_type) ? calendarEvent.repair_type : (calendarEvent.repair_type ? [calendarEvent.repair_type] : []),
-    workType: calendarEvent.work_type || "",
-    status: calendarEvent.status || "未開始",
-    description: calendarEvent.description || "",
-    timePeriod: calendarEvent.time_period || "",
-    isDelayed: calendarEvent.is_delayed || false,
-  };
-
-
   const form = useForm({
     resolver: zodResolver(CalendarEventValidationShema),
     mode: "onChange",
     defaultValues: {
-      workers: existingFields.workers as string[],
-      vehicleInfo: existingFields.vehicleInfo,
-      repairType: existingFields.repairType,
-      workType: existingFields.workType,
-      status: existingFields.status,
-      description: existingFields.description,
+      workers: (calendarEvent.workers || []) as string[],
+      vehicleInfo: calendarEvent.vehicle_info || "",
+      repairType: Array.isArray(calendarEvent.repair_type) ? calendarEvent.repair_type : (calendarEvent.repair_type ? [calendarEvent.repair_type] : []),
+      workType: calendarEvent.work_type || "",
+      status: calendarEvent.status || "未開始",
+      description: calendarEvent.description || "",
       start: calendarEvent.start,
       end: dayjs(calendarEvent.end).add(-1, "day").format("YYYY-MM-DD"),
-      timePeriod: existingFields.timePeriod,
-      isDelayed: existingFields.isDelayed,
+      timePeriod: calendarEvent.time_period || "",
+      isDelayed: calendarEvent.is_delayed || false,
       images: calendarEvent.images || [],
     },
   });
@@ -98,32 +85,22 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
 
   // Reset form when calendarEvent changes
   useEffect(() => {
-    const newExistingFields = {
-      workers: calendarEvent.workers || [],
-      vehicleInfo: calendarEvent.vehicle_info || "",
-      repairType: Array.isArray(calendarEvent.repair_type) ? calendarEvent.repair_type : (calendarEvent.repair_type ? [calendarEvent.repair_type] : []),
-      workType: calendarEvent.work_type || "",
-      status: calendarEvent.status || "未開始",
-      description: calendarEvent.description || "",
-      timePeriod: calendarEvent.time_period || "",
-      isDelayed: calendarEvent.is_delayed || false,
-      images: calendarEvent.images || [],
-    };
-
-    form.reset({
-      workers: newExistingFields.workers as string[],
-      vehicleInfo: newExistingFields.vehicleInfo,
-      repairType: newExistingFields.repairType,
-      workType: newExistingFields.workType,
-      status: newExistingFields.status,
-      description: newExistingFields.description,
-      start: calendarEvent.start,
-      end: dayjs(calendarEvent.end).add(-1, "day").format("YYYY-MM-DD"),
-      timePeriod: newExistingFields.timePeriod,
-      isDelayed: newExistingFields.isDelayed,
-      images: newExistingFields.images,
-    });
-  }, [calendarEvent, form]);
+    if (modalOpen && calendarEvent) {
+      form.reset({
+        workers: (calendarEvent.workers || []) as string[],
+        vehicleInfo: calendarEvent.vehicle_info || "",
+        repairType: Array.isArray(calendarEvent.repair_type) ? calendarEvent.repair_type : (calendarEvent.repair_type ? [calendarEvent.repair_type] : []),
+        workType: calendarEvent.work_type || "",
+        status: calendarEvent.status || "未開始",
+        description: calendarEvent.description || "",
+        start: calendarEvent.start,
+        end: dayjs(calendarEvent.end).add(-1, "day").format("YYYY-MM-DD"),
+        timePeriod: calendarEvent.time_period || "",
+        isDelayed: calendarEvent.is_delayed || false,
+        images: calendarEvent.images || [],
+      });
+    }
+  }, [calendarEvent, modalOpen, form]);
 
   function onSubmit(values: any) {
     const formatValues = {
@@ -135,7 +112,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       description: values.description,
       start: values.start,
       end: values.end ? dayjs(values.end).add(1, "day").format("YYYY-MM-DD") : values.start,
-      time_period: values.timePeriod || null,
+      time_period: values.timePeriod && values.timePeriod.trim() !== "" ? values.timePeriod : null,
       is_delayed: values.isDelayed,
       images: values.images || [],
     };
@@ -581,14 +558,19 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
             <FormField
               control={form.control}
               name="timePeriod"
-              render={({ field }) => (
+              render={({ field }) => {
+                // Ensure value is properly set
+                const currentValue = field.value || "";
+                return (
                 <FormItem>
                   <div className="space-y-2">
                     <div className="text-sm font-semibold text-gray-700">時間帯</div>
                     <FormControl>
                       <RadioGroup
-                        onValueChange={field.onChange}
-                        value={field.value}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                        }}
+                        value={currentValue}
                         className="grid grid-cols-2 gap-2"
                       >
                         <div className="relative">
@@ -656,7 +638,8 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
                     <FormMessage />
                   </div>
                 </FormItem>
-              )}
+                );
+              }}
             />
 
             <FormField

@@ -332,15 +332,10 @@ const WindCalendar = () => {
       const status = event.status || "未開始";
       const eventIsDelayed = event.is_delayed || false;
       
-      // Add delayed indicator if event is delayed
+      // Build display title without time period (we'll add it with color in eventContent)
       let displayTitle = event.vehicle_info || event.repair_type || "スケジュール";
       if (eventIsDelayed) {
         displayTitle = `${displayTitle} ⇒`;
-      }
-      
-      // Add time period indicator to title
-      if (event.time_period) {
-        displayTitle = `${event.time_period} ${displayTitle}`;
       }
       
       return {
@@ -355,10 +350,46 @@ const WindCalendar = () => {
           status: status,
           is_delayed: eventIsDelayed,
           time_period: event.time_period,
+          vehicle_info: event.vehicle_info,
+          repair_type: event.repair_type,
         },
       };
     });
   }, [finalFilteredEvents]);
+
+  // Custom event content renderer with colored text for time period and scrolling for long titles
+  const renderEventContent = (eventInfo: any) => {
+    const timePeriod = eventInfo.event.extendedProps?.time_period;
+    const title = eventInfo.event.title || "";
+    
+    if (timePeriod === "午前") {
+      return (
+        <div className="fc-event-title-wrapper">
+          <div className="fc-event-title-scroll">
+            <span className="fc-event-time-period" style={{ color: '#d97706', fontWeight: 700 }}>午前 </span>
+            <span className="fc-event-title-text">{title}</span>
+          </div>
+        </div>
+      );
+    } else if (timePeriod === "午後") {
+      return (
+        <div className="fc-event-title-wrapper">
+          <div className="fc-event-title-scroll">
+            <span className="fc-event-time-period" style={{ color: '#ea580c', fontWeight: 700 }}>午後 </span>
+            <span className="fc-event-title-text">{title}</span>
+          </div>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="fc-event-title-wrapper">
+        <div className="fc-event-title-scroll">
+          <span className="fc-event-title-text">{title}</span>
+        </div>
+      </div>
+    );
+  };
 
   // Handle worker filter toggle
   const toggleWorkerFilter = (workerName: string) => {
@@ -630,6 +661,7 @@ const WindCalendar = () => {
                     events={formattedEvents}
                     businessHours={true}
                     displayEventTime={false}
+                    eventContent={renderEventContent}
                     dateClick={(info) => {
                       const clickedDate = new Date(info.date);
                       setSelectedDate(clickedDate);
