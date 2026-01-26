@@ -167,6 +167,30 @@
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
 }
 
+/* Morning (午前) time period styling */
+.calendar-container .fc-event.time-period-morning {
+  border-left: 4px solid #fbbf24 !important;
+  position: relative !important;
+}
+
+.calendar-container .fc-event.time-period-morning::before {
+  content: '🌅' !important;
+  margin-right: 4px !important;
+  font-size: 0.85em !important;
+}
+
+/* Afternoon (午後) time period styling */
+.calendar-container .fc-event.time-period-afternoon {
+  border-left: 4px solid #fb923c !important;
+  position: relative !important;
+}
+
+.calendar-container .fc-event.time-period-afternoon::before {
+  content: '🌇' !important;
+  margin-right: 4px !important;
+  font-size: 0.85em !important;
+}
+
 .calendar-container .fc-daygrid-day-frame {
   min-height: 80px !important;
 }

@@ -50,6 +50,7 @@ export const createAnswerValidationShema = z.object({
 export const CalendarEventValidationShema = z.object({
   start: z.string({ required_error: "開始日を入力してください" }),
   end: z.string().optional(),
+  timePeriod: z.string().optional(),
   // New fields for enhanced schedule UI
   vehicleInfo: z.string().optional(),
   repairType: z.array(z.string()).max(7, { message: "最大7つまで選択できます" }),

@@ -67,6 +67,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
     workType: calendarEvent.work_type || "",
     status: calendarEvent.status || "未開始",
     description: calendarEvent.description || "",
+    timePeriod: calendarEvent.time_period || "",
     isDelayed: calendarEvent.is_delayed || false,
   };
 
@@ -83,6 +84,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       description: existingFields.description,
       start: calendarEvent.start,
       end: dayjs(calendarEvent.end).add(-1, "day").format("YYYY-MM-DD"),
+      timePeriod: existingFields.timePeriod,
       isDelayed: existingFields.isDelayed,
       images: calendarEvent.images || [],
     },
@@ -103,6 +105,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       workType: calendarEvent.work_type || "",
       status: calendarEvent.status || "未開始",
       description: calendarEvent.description || "",
+      timePeriod: calendarEvent.time_period || "",
       isDelayed: calendarEvent.is_delayed || false,
       images: calendarEvent.images || [],
     };
@@ -116,6 +119,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       description: newExistingFields.description,
       start: calendarEvent.start,
       end: dayjs(calendarEvent.end).add(-1, "day").format("YYYY-MM-DD"),
+      timePeriod: newExistingFields.timePeriod,
       isDelayed: newExistingFields.isDelayed,
       images: newExistingFields.images,
     });
@@ -131,6 +135,7 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
       description: values.description,
       start: values.start,
       end: values.end ? dayjs(values.end).add(1, "day").format("YYYY-MM-DD") : values.start,
+      time_period: values.timePeriod || null,
       is_delayed: values.isDelayed,
       images: values.images || [],
     };
@@ -572,6 +577,87 @@ const EditCalendarEventModal: React.FC<ModalProps> = ({
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="timePeriod"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-700">時間帯</div>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        className="grid grid-cols-2 gap-2"
+                      >
+                        <div className="relative">
+                          <RadioGroupItem 
+                            value="午前" 
+                            id="edit-午前" 
+                            className="peer sr-only"
+                          />
+                          <Label 
+                            htmlFor="edit-午前" 
+                            className={`flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:scale-105 ${
+                              field.value === "午前" 
+                                ? "border-yellow-500 bg-yellow-50 shadow-md scale-105" 
+                                : "border-gray-200 hover:border-yellow-300 hover:bg-yellow-50"
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <div className={`w-5 h-5 border-2 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                field.value === "午前" 
+                                  ? "border-yellow-500 bg-yellow-500" 
+                                  : "border-gray-300"
+                              }`}>
+                                <div className={`w-2 h-2 bg-white rounded-full transition-opacity duration-300 ${
+                                  field.value === "午前" ? "opacity-100" : "opacity-0"
+                                }`}></div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-sm font-medium text-gray-700">午前</div>
+                              </div>
+                            </div>
+                          </Label>
+                        </div>
+                        <div className="relative">
+                          <RadioGroupItem 
+                            value="午後" 
+                            id="edit-午後" 
+                            className="peer sr-only"
+                          />
+                          <Label 
+                            htmlFor="edit-午後" 
+                            className={`flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:scale-105 ${
+                              field.value === "午後" 
+                                ? "border-orange-500 bg-orange-50 shadow-md scale-105" 
+                                : "border-gray-200 hover:border-orange-300 hover:bg-orange-50"
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <div className={`w-5 h-5 border-2 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                field.value === "午後" 
+                                  ? "border-orange-500 bg-orange-500" 
+                                  : "border-gray-300"
+                              }`}>
+                                <div className={`w-2 h-2 bg-white rounded-full transition-opacity duration-300 ${
+                                  field.value === "午後" ? "opacity-100" : "opacity-0"
+                                }`}></div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-sm font-medium text-gray-700">午後</div>
+                              </div>
+                            </div>
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

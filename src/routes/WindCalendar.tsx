@@ -310,6 +310,13 @@ const WindCalendar = () => {
       classes.push(`status-${event.extendedProps.status}`);
     }
     
+    // Add time period classes for morning/afternoon distinction
+    if (event.extendedProps.time_period === "午前") {
+      classes.push("time-period-morning");
+    } else if (event.extendedProps.time_period === "午後") {
+      classes.push("time-period-afternoon");
+    }
+    
     // Add delayed class for styling
     if (event.extendedProps.is_delayed) {
       classes.push("is-delayed");
@@ -331,6 +338,11 @@ const WindCalendar = () => {
         displayTitle = `${displayTitle} ⇒`;
       }
       
+      // Add time period indicator to title
+      if (event.time_period) {
+        displayTitle = `${event.time_period} ${displayTitle}`;
+      }
+      
       return {
         ...event,
         id: event.id.toString(),
@@ -342,6 +354,7 @@ const WindCalendar = () => {
           is_absent: event.is_absent,
           status: status,
           is_delayed: eventIsDelayed,
+          time_period: event.time_period,
         },
       };
     });
