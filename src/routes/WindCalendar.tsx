@@ -366,7 +366,6 @@ const WindCalendar = () => {
       return (
         <div className="fc-event-title-wrapper">
           <div className="fc-event-title-scroll">
-            <span className="fc-event-time-period" style={{ color: '#d97706', fontWeight: 700 }}>午前 </span>
             <span className="fc-event-title-text">{title}</span>
           </div>
         </div>
@@ -375,7 +374,6 @@ const WindCalendar = () => {
       return (
         <div className="fc-event-title-wrapper">
           <div className="fc-event-title-scroll">
-            <span className="fc-event-time-period" style={{ color: '#ea580c', fontWeight: 700 }}>午後 </span>
             <span className="fc-event-title-text">{title}</span>
           </div>
         </div>

@@ -110,8 +110,8 @@
 }
 
 .calendar-container .fc-event {
-  border-radius: 4px !important;
-  /* border: none !important; */
+  
+  border: none !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
   font-weight: 500 !important;
   padding: 2px 6px !important;
@@ -163,13 +163,13 @@
 .calendar-container .fc-event.is-delayed {
   background: #ef4444 !important;
   color: white !important;
-  border: 2px solid #dc2626 !important;
+  border: none !important;
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
 }
 
 /* Morning (午前) time period styling */
 .calendar-container .fc-event.time-period-morning {
-  border-left: 4px solid #fbbf24 !important;
+  border-left: none !important;
   position: relative !important;
 }
 
@@ -181,7 +181,7 @@
 
 /* Afternoon (午後) time period styling */
 .calendar-container .fc-event.time-period-afternoon {
-  border-left: 4px solid #fb923c !important;
+  border-left: none !important;
   position: relative !important;
 }
 
