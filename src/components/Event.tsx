@@ -93,7 +93,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
               <h3 className="text-lg font-semibold text-gray-900 tracking-tight">{getVehicleInfoValue()}</h3>
               <div className="flex items-center gap-1">
                 {event.time_period && (
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full shadow-sm ${
+                  <span className={`px-2 py-2 text-xs font-medium rounded-full shadow-sm ${
                     event.time_period === "午前" 
                       ? "bg-yellow-100 text-yellow-700 border border-yellow-200" 
                       : "bg-orange-100 text-orange-700 border border-orange-200"
