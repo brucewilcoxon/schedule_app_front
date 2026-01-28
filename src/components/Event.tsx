@@ -78,7 +78,9 @@ const Event: React.FC<EventProps> = ({ event }) => {
   };
   return (
     <>
-      <div className={`flex p-2 justify-between rounded-md ${statusColor}`}>
+      {/* <div className={`flex p-2 justify-between rounded-md ${statusColor}`}> */}
+      <div className={`flex p-2 justify-between ${statusColor}`}>
+
         <div className="flex">
           <div className="flex flex-shrink-0 items-center justify-center w-8 h-8 bg-blue-500 rounded-lg mr-3 shadow-sm">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
