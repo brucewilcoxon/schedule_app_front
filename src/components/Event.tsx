@@ -96,7 +96,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
                       ? "bg-yellow-100 text-yellow-700 border border-yellow-200" 
                       : "bg-orange-100 text-orange-700 border border-orange-200"
                   }`}>
-                    {event.time_period === "午前" ? "🌅" : "🌇"}
+                    {event.time_period === "午前" ? "🟦" : "🟥"}
                   </span>
                 )}
                 <span className={`px-3 py-1 text-xs font-medium rounded-full shadow-sm ${
