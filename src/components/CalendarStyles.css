@@ -174,7 +174,7 @@
 }
 
 .calendar-container .fc-event.time-period-morning::before {
-  content: '🌅' !important;
+  content: '🟦' !important;
   margin-right: 4px !important;
   font-size: 0.85em !important;
 }
@@ -186,7 +186,7 @@
 }
 
 .calendar-container .fc-event.time-period-afternoon::before {
-  content: '🌇' !important;
+  content: '🟥' !important;
   margin-right: 4px !important;
   font-size: 0.85em !important;
 }
